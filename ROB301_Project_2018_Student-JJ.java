@@ -37,15 +37,40 @@ public class ROB301_Project_2018_Student {
 		System.out.println("Optimal Path: " + optPath);
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
-		my_map[1][6] = '1'; // Add a wall to the map (for demo)
-		g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
-		optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
-		System.out.println("Optimal Path: " + optPath);
-		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
+		while (ifGoal == false){
+			//
+			/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
+			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
+			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
+			System.out.println("Optimal Path: " + optPath);
+			printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
-		// Insert your code here...
+			//Insert your code here...
+			*/
+			updateMap();
+
+		}
 
 	}
+
+
+	public static boolean ifGoal(curPos, curHead, goalPos, goalHead){
+		// return true and execute the turning if goal is reached
+		// return false if not
+		char[] listHead = ['U', 'R', 'D', 'L'];
+		if(curPos != goalPos){
+			return false
+		}
+		else{
+			System.out.println("Goal is reached!");
+			curHeadIndex = listHead.indexOf(curHead);
+			goalHeadIndex = listHead.indexOf(goalHead);
+			direction = goalHeadIndex - curHeadIndex;
+			robot_reading.turn_90(direction);
+			return true
+		}
+	}
+
 
 	public static void initializeMap(){
 		/* Map should look like:
