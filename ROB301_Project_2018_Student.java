@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
 
-import lab4_monday.Tuesday.robot_reading;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
@@ -18,7 +17,7 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 
-public class ROB301_Project_2018_Student {
+public class FinalProjectMonday {
 	static int asci_count = 0; // ASCII counter
 	static int[] coord = new int [2]; // Keep track of coordinates
 	static Map<Character, int[]> char_to_position; // Hash map maps node with given name to coordinate on map
@@ -351,35 +350,46 @@ class robot_control{
 	boolean pivot_flag = false;
 	public boolean run(float distance) throws InterruptedException{
 		time_start = System.nanoTime();
-		sensor_data = robot_reading.get_sonic_reading();
+		//sensor_data = robot_reading.get_sonic_reading();
 
-		robot_reading.turn(motor_speed, motor_speed);
+		//robot_reading.turn(motor_speed, motor_speed);
 		time_end = System.nanoTime();
 		d_t = time_end - time_start;
 		if (start_flag == false){
 			start_flag = true;
 			d_t = 0;
 		}
+		
 		robot_distance += ((motor_speed)*0.0275)*d_t*2/1000000000;
-
+	}
+	public void turn(int direction){
+		Motor.B.setSpeed(90);
+		Motor.C.setSpeed(90);
+		Motor.B.rotate(direction*184, true);
+		Motor.C.rotate(direction*(-184));
+		
+		Thread.sleep((long) (184.090909090*1000/90));
+	}
 }
+	
+	
 
 class robot_reading{
 	
-	public static EV3ColorSensor color = new EV3ColorSensor(SensorPort.S3);
-	public static EV3UltrasonicSensor sonic = new EV3UltrasonicSensor(SensorPort.S2);
+	//public static final EV3ColorSensor color = new EV3ColorSensor(SensorPort.S3);
+	//public static final EV3UltrasonicSensor sonic = new EV3UltrasonicSensor(SensorPort.S2);
 
-	public static float get_color_reading() {
+	public float get_color_reading() {
 		
-		int sampleSize = color.sampleSize();
+		//int sampleSize = color.sampleSize();
 		float[] idsample = new float[sampleSize];
-		color.getRedMode().fetchSample(idsample, 0);
+		//color.getRedMode().fetchSample(idsample, 0);
 		LCD.clear();
 		return idsample[0];
 		
 	}
 
-	public static float get_sonic_reading() {
+	public float get_sonic_reading() {
 	
 		int sampleSize = sonic.sampleSize();
 		float[] sonicsample = new float[sampleSize];
@@ -388,31 +398,12 @@ class robot_reading{
 		return sonicsample[0]*100;
 	}
 		
-		public static void turn_new(double lspeed, double rspeed) {
-			
-			int left_speed_round = (int) lspeed;
-			int right_speed_round = (int) rspeed;
-			
-			Motor.B.setSpeed(Math.abs(left_speed_round));
-			if(lspeed > 0){
-				Motor.B.forward();
-			} else if(lspeed < 0) {
-				Motor.B.backward();
-			} else {
-				Motor.B.stop(true);
-			}
-			
-			Motor.C.setSpeed(Math.abs(right_speed_round));
-			if(rspeed > 0){
-				Motor.C.forward();
-			} else if(rspeed < 0) {
-				Motor.C.backward();
-			} else {
-				Motor.C.stop(true);
-			}		
-		}
-
-		public static void turn(double lspeed, double rspeed) {
+	public void turn_90() {
+		Motor.B.rotate(92);
+		Motor.C.rotate(-92);
+	}
+		
+		public void turn(double lspeed, double rspeed) {
 			
 			int left_speed_round = (int) lspeed;
 			int right_speed_round = (int) rspeed;
@@ -424,3 +415,4 @@ class robot_reading{
 		}
 	}
 }
+*/
