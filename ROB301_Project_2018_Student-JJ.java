@@ -28,6 +28,7 @@ public class ROB301_Project_2018_Student {
 		char curHead = 'R'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
 		char goalPos = 'Y'; // Final position the robot needs to reach
 		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
+		double wall_distance = 10;
 
 		List<Character> optPath; // Optimal path
 
@@ -47,14 +48,23 @@ public class ROB301_Project_2018_Student {
 
 			//Insert your code here...
 			*/
-			updateMap();
+			updateMap(curPos, curHead, wall_distance, my_map);
+			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
+			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
+			System.out.println("Optimal Path: " + optPath);
+			nextPos = optPath[0]
 
+			// move one grid forward
+			// Update curPos and curHead
+			curHead = updateHead(curPos, nextPos) // write function to update curHead
+			curPos = nextPos;
 		}
 
 	}
 
+	//public static char
 
-	public static boolean ifGoal(curPos, curHead, goalPos, goalHead){
+	public static boolean ifGoal(char curPos,char curHead,char goalPos,char goalHead){
 		// return true and execute the turning if goal is reached
 		// return false if not
 		char[] listHead = ['U', 'R', 'D', 'L'];
