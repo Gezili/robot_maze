@@ -55,7 +55,7 @@ public class ROB301_Project_2018_Student {
 			System.out.println("Optimal Path: " + optPath);
 			nextPos = optPath[0];
 			nextHead = turnHead(curHead, curPos, nextPos); // write function to update curHead ** Currenly this update already turns it
-			// turn to "nextHead" and move one grid forward along it (i.e. from currPos to nextPos)
+			// Move one grid forward along it (i.e. from currPos to nextPos)
 
 			// Update curPos and curHead
 			curHead = nextHead;
@@ -79,36 +79,65 @@ public class ROB301_Project_2018_Student {
 			goalHeadIndex = listHead.indexOf(goalHead);
 			direction = goalHeadIndex - curHeadIndex;
 			switch (direction) {
-				case 1: case -1: case 2: case -2:
-					robot_reading.turn_90(direction);
+				case 1: case -1: case 2: case -2: robot_reading.turn_90(direction);
 					break;
 				case 3:
 					robot_reading.turn_90(-1);
 					break;
-				case -3:
-					robot_reading.turn_90(1);
+				case -3: robot_reading.turn_90(1);
 					break;
-				default:
-					break;
-
-
+				default: break;
+			}
 			return true;
 		}
 	}
 
 	public static char turnHead(char curHead char curPos, char nextPos){
 		/* Use the difference between the current position and desired position (must be adjacent)
-			 to determine the heading and turn it.
+			 to determine the heading and turn it. Return nextHead
 			 Examples:
 			 * cur: (0,0) --> next: (0,1): nextHead = R
 			 * cur: (0,0) --> next: (1,0): nextHead = D
 			 * cur: (0,1) --> next: (0,0): nextHead = L
-			 * cur: (0,1) --> next: (0,0): nextHead = U
+			 * cur: (1,0) --> next: (0,0): nextHead = U
 		 */
 		 int [] curCoord = char_to_postion.get(curPos);
 		 int [] nextCoord = char_to_postion.get(nextPos);
-		 int [] deltaCoord = curCoord - nextCoord;
-		return;
+		 int [] deltaCoord = [[ - ], [curCoord[1] - nextCoord[1]]];
+
+		 // determine which direction it should be heading
+		 if(curCoord[0] == nextCoord[0]){
+			 if (curCoord[1] == nextCoord[1]+1){
+				 nextHead = 'L';
+			 }
+			 else if (curCoord[1] == nextCoord[1]-1){
+				 nextHead = 'R';
+			 }
+		 }
+		 else if(curCoord[1] == nextCoord[1]){
+			 if (curCoord[0] == nextCoord[0]+1){
+				 nextHead = 'U';
+			 }
+			 else if (curCoord[0] == nextCoord[0]-1){
+				 nextHead = 'D';
+			 }
+		 }
+
+		 // determine how it should turn to that direction and execute the turn
+		 curHeadIndex = listHead.indexOf(curHead);
+		 nextHeadIndex = listHead.indexOf(nextHead);
+		 direction = nextHeadIndex - curHeadIndex;
+		 switch (direction) {
+			 case 1: case -1: case 2: case -2: robot_reading.turn_90(direction);
+				 break;
+			 case 3:
+				 robot_reading.turn_90(-1);
+				 break;
+			 case -3: robot_reading.turn_90(1);
+				 break;
+			 default: break;
+		 }
+		return nextHead;
 	}
 
 	public static void initializeMap(){
