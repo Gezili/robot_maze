@@ -431,9 +431,11 @@ class robot_control{
 class pidcontroller{
 	
 	double k_p = 250;
-	double k_d = 1000;
+	double k_i = 30;
+	double k_d = 0;
 	double derivative = 0;
 	double lasterror = 0;
+	double integral= 0;
 	
 	double floor = 0.35;
 	double line = 0.09;
@@ -452,9 +454,12 @@ class pidcontroller{
 		derivative = error - lasterror;
 		lasterror = error;
 		
+		integral *= 0.98;
+		integral += error;
+		
 		//if negative - target is smaller - turn right
-		double rightspeed = 90 + k_p*error + k_d*derivative;
-		double leftspeed = 90 - k_p*error - k_d*derivative;
+		double rightspeed = 90 + k_p*error + k_d*derivative + k_i*integral;
+		double leftspeed = 90 - k_p*error - k_d*derivative - k_i*integral;
 	
 		robot_control.turn(leftspeed, rightspeed);
 		return (leftspeed + rightspeed)/2;
