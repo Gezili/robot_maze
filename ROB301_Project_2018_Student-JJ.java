@@ -53,10 +53,11 @@ public class ROB301_Project_2018_Student {
 			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 			System.out.println("Optimal Path: " + optPath);
 			nextPos = optPath[0]
-
-			// move one grid forward
+			nextHead = updateHead(curPos, nextPos) // write function to update curHead
+			// turn to "nextHead" and move one grid forward along it (i.e. from currPos to nextPos)
+			
 			// Update curPos and curHead
-			curHead = updateHead(curPos, nextPos) // write function to update curHead
+			curHead = nextHead;
 			curPos = nextPos;
 		}
 
@@ -112,7 +113,7 @@ public class ROB301_Project_2018_Student {
 			for(int j =0; j < 11; j ++){
 				my_map[i][j] = 'Z';
 			}
-		} 
+		}
 		// Populate inner map area with 0's to signify free path between robot positions
 		for(int i = 1; i < 10; i++){
 			for(int j =1; j < 10; j ++){
