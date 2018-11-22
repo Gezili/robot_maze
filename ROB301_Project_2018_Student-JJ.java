@@ -103,7 +103,7 @@ public class ROB301_Project_2018_Student {
 			for(int j =0; j < 11; j ++){
 				my_map[i][j] = 'Z';
 			}
-		}
+		} 
 		// Populate inner map area with 0's to signify free path between robot positions
 		for(int i = 1; i < 10; i++){
 			for(int j =1; j < 10; j ++){
