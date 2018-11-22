@@ -345,10 +345,18 @@ class robot_control{
 	double robot_distance = 0;
 	boolean start_flag = false;
 	double magic_number = 0.8;
-	public boolean run(double distance, double speed) throws InterruptedException{
+	
+	public void reset_flags(){
+		
+		robot_distance = 0;
+		start_flag = true;
+		
+	}
+	
+	public double run(double speed) throws InterruptedException{
 		time_start = System.nanoTime();
 		//sensor_data = robot_reading.get_sonic_reading();
-
+		System.out.println(robot_distance);
 		//robot_reading.turn(motor_speed, motor_speed);
 		time_end = System.nanoTime();
 		d_t = time_end - time_start;
@@ -357,17 +365,13 @@ class robot_control{
 			d_t = 0;
 		}
 		
-		robot_distance += ((speed)*0.0275)*d_t*2*magic_number/1000000;
-		if (robot_distance > distance){
-			robot_distance = 0;
-			start_flag = true;
-			return false;
-		} else {
-			return true;
+		robot_distance += ((speed)*0.0275)*d_t*2*magic_number/1000000000;
+		
+		return robot_distance;
 			
-		}
 	}
-	
+	//We want this to output a distance (?)
+
 	public static void turn_increment(int direction) throws InterruptedException{
 		
 		Motor.B.setSpeed(90);
@@ -388,15 +392,6 @@ class robot_control{
 		Motor.C.setSpeed(90);
 		Motor.B.rotate(direction*92, true);
 		Motor.C.rotate(direction*(-92));
-		
-		Thread.sleep((long) (184.090909090*1000/90));
-	}
-		
-	public void turn_90(int direction) throws InterruptedException{
-		Motor.B.setSpeed(90);
-		Motor.C.setSpeed(90);
-		Motor.B.rotate(direction*184, true);
-		Motor.C.rotate(direction*(-184));
 		
 		Thread.sleep((long) (184.090909090*1000/90));
 	}
@@ -432,7 +427,7 @@ class pidcontroller{
 	
 	double k_p = 250;
 	double k_i = 30;
-	double k_d = 0;
+	double k_d = 500;
 	double derivative = 0;
 	double lasterror = 0;
 	double integral= 0;
@@ -491,4 +486,6 @@ class robot_reading{
 		LCD.clear();
 		return sonicsample[0]*100;
 	}
+	
+	public float 
 }
