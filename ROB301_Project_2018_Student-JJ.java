@@ -21,6 +21,7 @@ public class ROB301_Project_2018_Student {
 	static int[] coord = new int [2]; // Keep track of coordinates
 	static Map<Character, int[]> char_to_position; // Hash map maps node with given name to coordinate on map
 	static char[][] my_map; // Stores maze map
+	static char[] listHead = ['U', 'R', 'D', 'L']; // List of 4 possible Headings
 
 	public static void main(String[] args) {
 		int sizeMapX = 11; int sizeMapY = 11;
@@ -52,36 +53,63 @@ public class ROB301_Project_2018_Student {
 			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
 			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 			System.out.println("Optimal Path: " + optPath);
-			nextPos = optPath[0]
-			nextHead = updateHead(curPos, nextPos) // write function to update curHead
+			nextPos = optPath[0];
+			nextHead = turnHead(curHead, curPos, nextPos); // write function to update curHead ** Currenly this update already turns it
 			// turn to "nextHead" and move one grid forward along it (i.e. from currPos to nextPos)
-			
+
 			// Update curPos and curHead
 			curHead = nextHead;
 			curPos = nextPos;
 		}
-
+		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 	}
 
 	//public static char
 
 	public static boolean ifGoal(char curPos,char curHead,char goalPos,char goalHead){
-		// return true and execute the turning if goal is reached
-		// return false if not
-		char[] listHead = ['U', 'R', 'D', 'L'];
+		/* return true and execute the turning if goal is reached
+			 return false if not
+		 */
 		if(curPos != goalPos){
-			return false
+			return false;
 		}
 		else{
 			System.out.println("Goal is reached!");
 			curHeadIndex = listHead.indexOf(curHead);
 			goalHeadIndex = listHead.indexOf(goalHead);
 			direction = goalHeadIndex - curHeadIndex;
-			robot_reading.turn_90(direction);
-			return true
+			switch (direction) {
+				case 1: case -1: case 2: case -2:
+					robot_reading.turn_90(direction);
+					break;
+				case 3:
+					robot_reading.turn_90(-1);
+					break;
+				case -3:
+					robot_reading.turn_90(1);
+					break;
+				default:
+					break;
+
+
+			return true;
 		}
 	}
 
+	public static char turnHead(char curHead char curPos, char nextPos){
+		/* Use the difference between the current position and desired position (must be adjacent)
+			 to determine the heading and turn it.
+			 Examples:
+			 * cur: (0,0) --> next: (0,1): nextHead = R
+			 * cur: (0,0) --> next: (1,0): nextHead = D
+			 * cur: (0,1) --> next: (0,0): nextHead = L
+			 * cur: (0,1) --> next: (0,0): nextHead = U
+		 */
+		 int [] curCoord = char_to_postion.get(curPos);
+		 int [] nextCoord = char_to_postion.get(nextPos);
+		 int [] deltaCoord = curCoord - nextCoord;
+		return;
+	}
 
 	public static void initializeMap(){
 		/* Map should look like:
