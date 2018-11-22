@@ -28,11 +28,7 @@ public class ROB301_Project_2018_Student {
 		char curHead = 'R'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
 		char goalPos = 'Y'; // Final position the robot needs to reach
 		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
-<<<<<<< HEAD
-		double wall_distance = 10;
-=======
 		double wall_distance = 10;// to be determined
->>>>>>> 5c88c73fbdfb399a3c182e19de7ee0670d6f35b6
 
 		List<Character> optPath; // Optimal path
 
