@@ -197,7 +197,7 @@ public class ROB301_Project_2018_Student {
 		}
 	}
 
-	public static void updateMap(char curPos, char curHead, double wall_distance,char[][] map){
+	public static void updateMap_old(char curPos, char curHead, double wall_distance,char[][] map){
 		/***
 		 * Inputs: current Position, current Heading
 		 * Outputs: None
@@ -224,6 +224,37 @@ public class ROB301_Project_2018_Student {
 				int wall_x = curCoord[0]+1;
 				int wall_y = curCoord[1];
 			}
+		}
+		if(map[wall_x][wall_y] != 'Z'){
+			map[wall_x][wall_y] = '1';
+		}
+	}
+
+	public static void updateMap(char curPos, char curHead, char[][] map){
+		/***
+		 * Inputs: current Position, current Heading
+		 * Outputs: None
+		 * Function: Use current position and heading to correctly add a wall to the map my_map
+		***/
+
+		// Insert your code here...
+		int [] curCoord = char_to_postion.get(curPos);
+
+		if(curHead == 'U'){
+			int wall_x = curCoord[0];
+			int wall_y = curCoord[1]+1;
+		}
+		else if(curHead == 'D'){
+			int wall_x = curCoord[0];
+			int wall_y = curCoord[1]-1;
+		}
+		else if(curHead == 'L'){
+			int wall_x = curCoord[0]-1;
+			int wall_y = curCoord[1];
+		}
+		else if(curHead == 'R'){
+			int wall_x = curCoord[0]+1;
+			int wall_y = curCoord[1];
 		}
 		if(map[wall_x][wall_y] != 'Z'){
 			map[wall_x][wall_y] = '1';
