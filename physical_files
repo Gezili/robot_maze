@@ -345,6 +345,12 @@ class robot_control{
 	double robot_distance = 0;
 	boolean start_flag = false;
 	double magic_number = 0.8;
+	double grid_length = 17.5;
+	pidcontroller pid = new pidcontroller();
+	robot_reading robotreading = new robot_reading();
+	double turn_sensitivity_thresh = 0.15;
+	double speed = 0;
+	double magic_number_sonic = 6.5;
 	
 	public void reset_flags(){
 		
@@ -370,6 +376,28 @@ class robot_control{
 		return robot_distance;
 			
 	}
+	
+	public void turn_90() throws InterruptedException{
+		turn_45(-1);
+		while(robotreading.get_color_reading() >= turn_sensitivity_thresh){
+			robot_control.turn_increment(-1);
+		}
+	}
+	
+	public void move_1_grid() throws InterruptedException{
+		while (run(100) < grid_length){
+		/*
+			if(Button.ESCAPE.isDown()){
+				break;
+			} 
+			*/
+			speed = pid.run();
+		}
+	
+		reset_flags();
+		pid.resetpid();
+		}	
+
 	//We want this to output a distance (?)
 
 	public static void turn_increment(int direction) throws InterruptedException{
@@ -396,6 +424,17 @@ class robot_control{
 		Thread.sleep((long) (184.090909090*1000/90));
 	}
 	
+	public void move_until_wall(){
+		while(robotreading.get_sonic_reading() >= magic_number_sonic){
+			/*
+			if(Button.ESCAPE.isDown()){
+				break;
+			} 
+			*/
+			speed = pid.run();
+			//control_run = robotcontrol.run(grid_length, speed);
+		}
+	}
 	public static void turn(double lspeed, double rspeed) {
 		
 		int left_speed_round = (int) lspeed;
@@ -423,10 +462,12 @@ class robot_control{
 	
 }
 
+
+
 class pidcontroller{
 	
 	double k_p = 250;
-	double k_i = 30;
+	double k_i = 5;
 	double k_d = 500;
 	double derivative = 0;
 	double lasterror = 0;
@@ -440,6 +481,11 @@ class pidcontroller{
 	int direction; 
 	double speed;
 	double sensor_data; //this is the vlaue returnd by sensor
+	
+	public void resetpid(){
+		integral = 0;
+	}
+	
 	public double run(){
 		sensor_data = robot_reading.get_color_reading();
 		
@@ -487,5 +533,5 @@ class robot_reading{
 		return sonicsample[0]*100;
 	}
 	
-	public float 
+
 }
