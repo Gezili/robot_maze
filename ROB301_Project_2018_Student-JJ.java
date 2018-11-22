@@ -55,7 +55,7 @@ public class ROB301_Project_2018_Student {
 			nextPos = optPath[0]
 			nextHead = updateHead(curPos, nextPos) // write function to update curHead
 			// turn to "nextHead" and move one grid forward along it (i.e. from currPos to nextPos)
-			
+
 			// Update curPos and curHead
 			curHead = nextHead;
 			curPos = nextPos;
@@ -168,7 +168,9 @@ public class ROB301_Project_2018_Student {
 				int wall_y = curCoord[1];
 			}
 		}
-		map[wall_x][wall_y] = '1';
+		if(map[wall_x][wall_y] != 'Z'){
+			map[wall_x][wall_y] = '1';
+		}
 	}
 
 	public static Graph getGraph(char[][] map, int sizeX, int sizeY, Map<Character, int[]> char_to_position){
