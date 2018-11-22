@@ -196,7 +196,9 @@ public class ROB301_Project_2018_Student {
 				int wall_y = curCoord[1];
 			}
 		}
-		map[wall_x][wall_y] = '1';
+		if(map[wall_x][wall_y] != 'Z'){
+			map[wall_x][wall_y] = '1';
+		}
 	}
 
 	public static Graph getGraph(char[][] map, int sizeX, int sizeY, Map<Character, int[]> char_to_position){
