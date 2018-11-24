@@ -29,7 +29,6 @@ public class ROB301_Project_2018_Student {
 		char curHead = 'R'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
 		char goalPos = 'Y'; // Final position the robot needs to reach
 		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
-		double wall_distance = 10;// to be determined
 
 		List<Character> optPath; // Optimal path
 
@@ -49,7 +48,7 @@ public class ROB301_Project_2018_Student {
 
 			//Insert your code here...
 			*/
-			updateMap(curPos, curHead, wall_distance, my_map);
+			updateMap(curPos, curHead, my_map);
 			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
 			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 			System.out.println("Optimal Path: " + optPath);
@@ -194,39 +193,6 @@ public class ROB301_Project_2018_Student {
 			for(int j =2; j < 10; j +=2){
 				my_map[i][j] = 'Z';
 			}
-		}
-	}
-
-	public static void updateMap_old(char curPos, char curHead, double wall_distance,char[][] map){
-		/***
-		 * Inputs: current Position, current Heading
-		 * Outputs: None
-		 * Function: Use current position and heading to correctly add a wall to the map my_map
-		***/
-
-		// Insert your code here...
-		int [] curCoord = char_to_postion.get(curPos);
-		double sonic_data = robot_reading.get_sonic_reading();
-		if(sonic_data <= wall_distance){
-			if(curHead == 'U'){
-				int wall_x = curCoord[0];
-				int wall_y = curCoord[1]+1;
-			}
-			else if(curHead == 'D'){
-				int wall_x = curCoord[0];
-				int wall_y = curCoord[1]-1;
-			}
-			else if(curHead == 'L'){
-				int wall_x = curCoord[0]-1;
-				int wall_y = curCoord[1];
-			}
-			else if(curHead == 'R'){
-				int wall_x = curCoord[0]+1;
-				int wall_y = curCoord[1];
-			}
-		}
-		if(map[wall_x][wall_y] != 'Z'){
-			map[wall_x][wall_y] = '1';
 		}
 	}
 
