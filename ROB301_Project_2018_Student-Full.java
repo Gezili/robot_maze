@@ -294,6 +294,131 @@ public class ROB301_Project_2018_Student {
 	}
 }
 
+public class robot_control{
+
+	double sensor_data; //this is the value returned by sensor
+	long time_start;
+	long time_end;
+	long d_t;
+	double robot_distance = 0;
+	boolean start_flag = false;
+	double magic_number = 0.8;
+	double grid_length = 17.5;
+	pidcontroller pid = new pidcontroller();
+	robot_reading robotreading = new robot_reading();
+	double turn_sensitivity_thresh = 0.15;
+	double speed = 0;
+	double magic_number_sonic = 6.5;
+
+	public void reset_flags(){
+
+		robot_distance = 0;
+		start_flag = true;
+
+	}
+
+	public double run(double speed) throws InterruptedException{
+		time_start = System.nanoTime();
+		//sensor_data = robot_reading.get_sonic_reading();
+		System.out.println(robot_distance);
+		//robot_reading.turn(motor_speed, motor_speed);
+		time_end = System.nanoTime();
+		d_t = time_end - time_start;
+		if (start_flag == false){
+			start_flag = true;
+			d_t = 0;
+		}
+
+		robot_distance += ((speed)*0.0275)*d_t*2*magic_number/1000000000;
+
+		return robot_distance;
+
+	}
+
+	public void turn_90() throws InterruptedException{
+		turn_45(-1);
+		while(robotreading.get_color_reading() >= turn_sensitivity_thresh){
+			robot_control.turn_increment(-1);
+		}
+	}
+
+	public void move_1_grid() throws InterruptedException{
+		while (run(100) < grid_length){
+		/*
+			if(Button.ESCAPE.isDown()){
+				break;
+			}
+			*/
+			speed = pid.run();
+		}
+
+		reset_flags();
+		pid.resetpid();
+		}
+
+	//We want this to output a distance (?)
+
+	public static void turn_increment(int direction) throws InterruptedException{
+
+		Motor.B.setSpeed(90);
+		Motor.C.setSpeed(90);
+
+		if (direction == -1){
+			Motor.B.backward();
+			Motor.C.forward();
+		} else if (direction == 1){
+			Motor.B.forward();
+			Motor.C.backward();
+		}
+		Thread.sleep((long) (10));
+	}
+
+	public void turn_45(int direction) throws InterruptedException{
+		Motor.B.setSpeed(90);
+		Motor.C.setSpeed(90);
+		Motor.B.rotate(direction*92, true);
+		Motor.C.rotate(direction*(-92));
+
+		Thread.sleep((long) (184.090909090*1000/90));
+	}
+
+	public void move_until_wall(){
+		while(robotreading.get_sonic_reading() >= magic_number_sonic){
+			/*
+			if(Button.ESCAPE.isDown()){
+				break;
+			}
+			*/
+			speed = pid.run();
+			//control_run = robotcontrol.run(grid_length, speed);
+		}
+	}
+	public static void turn(double lspeed, double rspeed) {
+
+		int left_speed_round = (int) lspeed;
+		int right_speed_round = (int) rspeed;
+
+		Motor.B.setSpeed(Math.abs(left_speed_round));
+		if(lspeed > 0){
+			Motor.B.forward();
+		} else if(lspeed < 0) {
+			Motor.B.backward();
+		} else {
+			Motor.B.stop(true);
+		}
+
+		Motor.C.setSpeed(Math.abs(right_speed_round));
+		if(rspeed > 0){
+			Motor.C.forward();
+		} else if(rspeed < 0) {
+			Motor.C.backward();
+		} else {
+			Motor.C.stop(true);
+		}
+	}
+}
+
+
 // DO NOT CHANGE FOLLOWING CODE. Path planning implementation
 class Vertex implements Comparable<Vertex> {
 
