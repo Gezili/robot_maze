@@ -564,3 +564,57 @@ class Graph {
 		return new ArrayList<Character>(distances.keySet());
 	}
 }
+
+//---------------------------------------------------------------------------------------------------------------
+//lots of work needs to be done here 
+//---------------------------------------------------------------------------------------------------------------
+class run_robot{
+
+	double sonic_reading;
+
+	int coord_final_x = 5;
+	int coord_final_y = 5;
+	int coord_init_x = 1;
+	int coord_init_y = 1;
+	??? robot_heading = ???;
+	??? next_loc = ???;
+
+	robot_reading robotreading = new robot_reading();
+	robot_control robotcontrol = new robot_control();
+
+    public void control_loop(){
+        
+        //placeholder functions - update_map, get_robot_heading, update_charlist, get_robot_position, robot_heading
+        while (robot_position(x) != coord_final_x and robot_position(y) != coord_final_y){
+			
+			while (get_robot_heading != robot_heading){
+				robotcontrol.turn_90();
+				sonic_reading = robotreading.get_sonic_reading();
+				if (sonic_reading < 15){
+					update_map();	
+					//replace with actual function names
+					robot_heading = get_new_heading();
+					next_loc = update_map.get_new_loc();
+				}
+				
+			}
+
+			wall_dist = robotreading.get_sonic_reading();
+			if (wall_dist <= 45){
+				robot_control.move_until_wall();
+				update_map();
+				update_position();
+			} else {
+				robot_control.move_1_grid();
+				update_position();
+			}
+		}
+
+
+
+
+    }
+
+
+
+}
