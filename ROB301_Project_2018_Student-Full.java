@@ -582,52 +582,6 @@ class Graph {
 	}
 }
 
-//---------------------------------------------------------------------------------------------------------------
-//lots of work needs to be done here
-//---------------------------------------------------------------------------------------------------------------
-class run_robot{
-
-	double sonic_reading;
-
-	int coord_final_x = 5;
-	int coord_final_y = 5;
-	int coord_init_x = 1;
-	int coord_init_y = 1;
-	??? robot_heading = ???;
-	??? next_loc = ???;
-
-	robot_reading robotreading = new robot_reading();
-	robot_control robotcontrol = new robot_control();
-
-    public void control_loop(){
-
-      //placeholder functions - update_map, get_robot_heading, update_charlist, get_robot_position, robot_heading
-      while (robot_position(x) != coord_final_x and robot_position(y) != coord_final_y){
-
-			while (get_robot_heading != robot_heading){
-				robotcontrol.turn_90();
-				sonic_reading = robotreading.get_sonic_reading();
-				if (sonic_reading < 15){
-					update_map();
-					//replace with actual function names
-					robot_heading = get_new_heading();
-					next_loc = update_map.get_new_loc();
-				}
-			}
-
-			wall_dist = robotreading.get_sonic_reading();
-			if (wall_dist <= 45){
-				robot_control.move_until_wall();
-				update_map();
-				update_position();
-			} else {
-				robot_control.move_1_grid();
-				update_position();
-			}
-		}
-  }
-}
-
 public class robot_reading{
 
 	//public static final EV3ColorSensor color = new EV3ColorSensor(SensorPort.S3);
@@ -667,5 +621,49 @@ public class robot_reading{
 			Motor.C.setSpeed(right_speed_round);
 			Motor.C.forward();
 		}
+	}
+}
+
+public class pidcontroller{
+	
+	double k_p = 250;
+	double k_i = 5;
+	double k_d = 500;
+	double derivative = 0;
+	double lasterror = 0;
+	double integral= 0;
+	
+	double floor = 0.35;
+	double line = 0.09;
+	double mid = 0.21;
+
+	double target = 0.21; //set target value
+	int direction; 
+	double speed;
+	double sensor_data; //this is the vlaue returnd by sensor
+	
+	public void resetpid(){
+		integral = 0;
+	}
+	
+	public double run(){
+		sensor_data = robot_reading.get_color_reading();
+		
+		
+		double error = target - sensor_data; //if positive - target is larger - turn left
+
+		derivative = error - lasterror;
+		lasterror = error;
+		
+		integral *= 0.98;
+		integral += error;
+		
+		//if negative - target is smaller - turn right
+		double rightspeed = 90 + k_p*error + k_d*derivative + k_i*integral;
+		double leftspeed = 90 - k_p*error - k_d*derivative - k_i*integral;
+	
+		robot_control.turn(leftspeed, rightspeed);
+		return (leftspeed + rightspeed)/2;
+				
 	}
 }
