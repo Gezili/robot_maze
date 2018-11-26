@@ -125,18 +125,18 @@ public class ROB301_Project_2018_Student {
 
 		 // determine which direction it should be heading
 		 if(curCoord[0] == nextCoord[0]){
-			 if (curCoord[1] == nextCoord[1]+1){
+			 if (curCoord[1] == nextCoord[1]+2){
 				 nextHead = 'L';
 			 }
-			 else if (curCoord[1] == nextCoord[1]-1){
+			 else if (curCoord[1] == nextCoord[1]-2){
 				 nextHead = 'R';
 			 }
 		 }
 		 else if(curCoord[1] == nextCoord[1]){
-			 if (curCoord[0] == nextCoord[0]+1){
+			 if (curCoord[0] == nextCoord[0]+2){
 				 nextHead = 'U';
 			 }
-			 else if (curCoord[0] == nextCoord[0]-1){
+			 else if (curCoord[0] == nextCoord[0]-2){
 				 nextHead = 'D';
 			 }
 		 }
