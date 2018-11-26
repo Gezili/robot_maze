@@ -27,10 +27,12 @@ public class ROB301_Project_2018_Student {
 		int sizeMapX = 11; int sizeMapY = 11;
 		char curPos = 'A'; // Start position of robot (to be updated)
 		char curHead = 'R'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
+		int[] curCoord = new int [2];
+		char nextPos;
+		char nextHead;
+		int[] nextCoord = new int [2];
 		char goalPos = 'Y'; // Final position the robot needs to reach
 		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
-		int[] curCoord = new int [2];
-		int[] nextCoord = new int [2];
 		List<Character> optPath; // Optimal path
 		double wall_dist;
 
@@ -45,7 +47,7 @@ public class ROB301_Project_2018_Student {
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
 
-		while (ifGoal() == false){
+		while (ifGoal(curPos, curHead, goalPos, goalHead) == false){
 			//
 			/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
 			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
@@ -103,7 +105,7 @@ public class ROB301_Project_2018_Student {
 		}
 	}
 
-	public static char turnHead(char curHead char curCoord, char nextCoord){
+	public static char turnHead(char curHead int[] curCoord, int[] nextCoord){
 		/* Use the difference between the current position and desired position (must be adjacent)
 			 to determine the heading and turn it. Return nextHead
 			 Examples:
@@ -621,39 +623,39 @@ class run_robot{
 }
 
 public class robot_reading{
-	
+
 	//public static final EV3ColorSensor color = new EV3ColorSensor(SensorPort.S3);
 	//public static final EV3UltrasonicSensor sonic = new EV3UltrasonicSensor(SensorPort.S2);
 
 	public float get_color_reading() {
-		
+
 		//int sampleSize = color.sampleSize();
 		float[] idsample = new float[sampleSize];
 		//color.getRedMode().fetchSample(idsample, 0);
 		LCD.clear();
 		return idsample[0];
-		
+
 	}
 
 	public float get_sonic_reading() {
-	
+
 		int sampleSize = sonic.sampleSize();
 		float[] sonicsample = new float[sampleSize];
 		sonic.fetchSample(sonicsample, 0);
 		LCD.clear();
 		return sonicsample[0]*100;
 	}
-		
+
 	public void turn_90() {
 		Motor.B.rotate(92);
 		Motor.C.rotate(-92);
 	}
-		
+
 		public void turn(double lspeed, double rspeed) {
-			
+
 			int left_speed_round = (int) lspeed;
 			int right_speed_round = (int) rspeed;
-			
+
 			Motor.B.setSpeed(left_speed_round);
 			Motor.B.forward();
 			Motor.C.setSpeed(right_speed_round);
