@@ -23,9 +23,9 @@ public class ROB301_Project_2018_Student {
 	static char[][] my_map; // Stores maze map
 	static char[] listHead = {'U', 'R', 'D', 'L'}; // List of 4 possible Headings
 
-	robot_reading reading = new robot_reading();
-	robot_control control = new robot_control();
-	run_robot run = new run_robot();
+	static robot_reading reading = new robot_reading();
+	static robot_control control = new robot_control();
+	static run_robot run = new run_robot();
 
 	public static void main(String[] args) {
 		int sizeMapX = 11; int sizeMapY = 11;
