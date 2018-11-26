@@ -29,8 +29,14 @@ public class ROB301_Project_2018_Student {
 		char curHead = 'R'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
 		char goalPos = 'Y'; // Final position the robot needs to reach
 		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
-
+		int[] curCoord = new int [2];
+		int[] nextCoord = new int [2];
 		List<Character> optPath; // Optimal path
+		double sonic_reading;
+
+		robot_reading reading = new robot_reading();
+		robot_control control = new robot_control();
+		run_robot run = new run_robot();
 
 		initializeMap(); // Initialize map with no walls
 		Graph g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
@@ -38,8 +44,6 @@ public class ROB301_Project_2018_Student {
 		System.out.println("Optimal Path: " + optPath);
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
-		robot_control control = new robot_control();
-		run_robot run = new run_robot();
 
 		while (ifGoal == false){
 			//
@@ -51,13 +55,24 @@ public class ROB301_Project_2018_Student {
 
 			//Insert your code here...
 			*/
-			updateMap(curPos, curHead, my_map);
 			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
 			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 			System.out.println("Optimal Path: " + optPath);
+			curCoord = char_to_postion.get(curPos);
 			nextPos = optPath[optPath.length - 1];
-			nextHead = turnHead(curHead, curPos, nextPos); // write function to update curHead ** Currenly this update already turns it
-			// Move one grid forward along it (i.e. from currPos to nextPos)
+			nextCoord = char_to_postion.get(nextPos);
+			nextHead = turnHead(curHead, curCoord, nextCoord); // write function to update curHead ** Currenly this update already turns it
+
+			// Move (i.e. from currPos to nextPos)
+			wall_dist = reading.get_sonic_reading();
+			if (wall_dist < 15){
+				updateMap(nextPos, nextHead, my_map);
+			} else if (wall_dist <= 45){
+				control.move_until_wall();
+				updateMap(nextPos, nextHead, my_map);
+			} else {
+				control.move_1_grid();
+			}
 
 			// Update curPos and curHead
 			curHead = nextHead;
@@ -65,8 +80,6 @@ public class ROB301_Project_2018_Student {
 		}
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 	}
-
-	//public static char
 
 	public static boolean ifGoal(char curPos,char curHead,char goalPos,char goalHead){
 		/* return true and execute the turning if goal is reached
@@ -81,20 +94,16 @@ public class ROB301_Project_2018_Student {
 			goalHeadIndex = listHead.indexOf(goalHead);
 			direction = goalHeadIndex - curHeadIndex;
 			switch (direction) {
-				case 1: case -1: case 2: case -2: control.turn_90(direction);
-					break;
-				case 3:
-					control.turn_90(-1);
-					break;
-				case -3: control.turn_90(1);
-					break;
+				case 1: case -3: control.turn_90(); control.turn_90(); control.turn_90(); break;
+				case 2: case -2: control.turn_90(); control.turn_90(); break;
+				case 3: case -1: control.turn_90(); break;
 				default: break;
 			}
 			return true;
 		}
 	}
 
-	public static char turnHead(char curHead char curPos, char nextPos){
+	public static char turnHead(char curHead char curCoord, char nextCoord){
 		/* Use the difference between the current position and desired position (must be adjacent)
 			 to determine the heading and turn it. Return nextHead
 			 Examples:
@@ -103,8 +112,6 @@ public class ROB301_Project_2018_Student {
 			 * cur: (0,1) --> next: (0,0): nextHead = L
 			 * cur: (1,0) --> next: (0,0): nextHead = U
 		 */
-		 int [] curCoord = char_to_postion.get(curPos);
-		 int [] nextCoord = char_to_postion.get(nextPos);
 
 		 // determine which direction it should be heading
 		 if(curCoord[0] == nextCoord[0]){
@@ -129,13 +136,9 @@ public class ROB301_Project_2018_Student {
 		 nextHeadIndex = listHead.indexOf(nextHead);
 		 direction = nextHeadIndex - curHeadIndex;
 		 switch (direction) {
-			 case 1: case -1: case 2: case -2: control.turn_90(direction);
-				 break;
-			 case 3:
-				 control.turn_90(-1);
-				 break;
-			 case -3: control.turn_90(1);
-				 break;
+			 case 1: case -3: control.turn_90(); control.turn_90(); control.turn_90(); break;
+			 case 2: case -2: control.turn_90(); control.turn_90(); break;
+			 case 3: case -1: control.turn_90(); break;
 			 default: break;
 		 }
 		return nextHead;
@@ -392,7 +395,7 @@ public class robot_control{
 			}
 			*/
 			speed = pid.run();
-			//control_run = robotcontrol.run(grid_length, speed);
+			//control_run = control.run(grid_length, speed);
 		}
 	}
 	public static void turn(double lspeed, double rspeed) {
