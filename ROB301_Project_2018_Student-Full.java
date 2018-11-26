@@ -23,6 +23,10 @@ public class ROB301_Project_2018_Student {
 	static char[][] my_map; // Stores maze map
 	static char[] listHead = {'U', 'R', 'D', 'L'}; // List of 4 possible Headings
 
+	robot_reading reading = new robot_reading();
+	robot_control control = new robot_control();
+	run_robot run = new run_robot();
+
 	public static void main(String[] args) {
 		int sizeMapX = 11; int sizeMapY = 11;
 		char curPos = 'A'; // Start position of robot (to be updated)
@@ -36,9 +40,6 @@ public class ROB301_Project_2018_Student {
 		List<Character> optPath; // Optimal path
 		double wall_dist;
 
-		robot_reading reading = new robot_reading();
-		robot_control control = new robot_control();
-		run_robot run = new run_robot();
 
 		initializeMap(); // Initialize map with no walls
 		Graph g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
@@ -63,7 +64,7 @@ public class ROB301_Project_2018_Student {
 			curCoord = char_to_position.get(curPos);
 			nextPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
 			nextCoord = char_to_position.get(nextPos);
-			nextHead = turnHead(curHead, curCoord, nextCoord); // write function to update curHead ** Currenly this update already turns it
+			nextHead = turnHead(curHead,  nextHead, curCoord, nextCoord); // write function to update curHead ** Currenly this update already turns it
 
 			// Move (i.e. from currPos to nextPos)
 			wall_dist = reading.get_sonic_reading();
@@ -83,10 +84,14 @@ public class ROB301_Project_2018_Student {
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 	}
 
-	public static boolean ifGoal(char curPos,char curHead,char goalPos,char goalHead){
+	public static boolean ifGoal(char curPos,char curHead, char goalPos,char goalHead){
 		/* return true and execute the turning if goal is reached
 			 return false if not
 		 */
+		char curHeadIndex;
+		char goalHeadIndex;
+		int direction;
+
 		if(curPos != goalPos){
 			return false;
 		}
@@ -105,7 +110,7 @@ public class ROB301_Project_2018_Student {
 		}
 	}
 
-	public static char turnHead(char curHead, int[] curCoord, int[] nextCoord){
+	public static char turnHead(char curHead, char nextHead, int[] curCoord, int[] nextCoord){
 		/* Use the difference between the current position and desired position (must be adjacent)
 			 to determine the heading and turn it. Return nextHead
 			 Examples:
