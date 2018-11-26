@@ -201,7 +201,7 @@ public class ROB301_Project_2018_Student {
 		}
 	}
 
-	public static void updateMap(char curPos, char curHead, char[][] map){
+	public static void updateMap(char curPos, char curHead, char[][] map, Map<Character, int[]> char_to_position){
 		/***
 		 * Inputs: current Position, current Heading
 		 * Outputs: None
