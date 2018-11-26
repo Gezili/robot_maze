@@ -21,15 +21,23 @@ public class ROB301_Project_2018_Student_Simulation {
 	static int[] coord = new int [2]; // Keep track of coordinates
 	static Map<Character, int[]> char_to_position; // Hash map maps node with given name to coordinate on map
 	static char[][] my_map; // Stores maze map
+	static char[] listHead = {'U', 'R', 'D', 'L'}; // List of 4 possible Headings
+	static char nextHead = 'Z';
+	
+	static int[] sonicdata = {75, 45};
 	
 	public static void main(String[] args) {  
 		int sizeMapX = 11; int sizeMapY = 11;
 		char curPos = 'A'; // Start position of robot (to be updated)
-		char curHead = 'R'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
-		char goalPos = 'Y'; // Final position the robot needs to reach
-		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
-		
+		char curHead = 'U'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
+		char goalPos = 'K'; // Final position the robot needs to reach
+		char goalHead = 'R'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
+		int[] curCoord = new int[2];
+		int[] nextCoord = new int[2];
 		List<Character> optPath; // Optimal path
+		char nextPos;
+		
+		double wall_dist;
 		
 		initializeMap(); // Initialize map with no walls
 		Graph g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
@@ -44,6 +52,8 @@ public class ROB301_Project_2018_Student_Simulation {
 //		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 		
 		// Insert your code here...
+		
+		/*
 		curPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
 		curHead = 'R';
 		updateMap(curPos, curHead, my_map, char_to_position);//updateMap adds wall in the direction of curHead
@@ -51,8 +61,154 @@ public class ROB301_Project_2018_Student_Simulation {
 		optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 		System.out.println("Optimal Path: " + optPath);
 		printMap(my_map);
+		*/
+		
+		int counter = 0;
+		
+		while (ifGoal(curPos, curHead, goalPos, goalHead) == false){
+			//
+			/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
+			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
+			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
+			System.out.println("Optimal Path: " + optPath);
+			printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
+			//Insert your code here...
+			*/
+			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
+			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
+			System.out.println("Optimal Path: " + optPath);
+			curCoord = char_to_position.get(curPos);
+			nextPos = optPath.get(optPath.size()-1);
+			nextCoord = char_to_position.get(nextPos);
+			turnHead(curHead, curCoord, nextCoord); // write function to update curHead ** Currently this update already turns it
+			System.out.println(curHead);
+			System.out.println(nextHead);
+			
+			System.out.println(curCoord[0]);
+			System.out.println(curCoord[1]);
+			System.out.println(nextCoord[0]);
+			System.out.println(nextCoord[1]);
+			// Move (i.e. from currPos to nextPos)
+			wall_dist = sonicdata[counter];
+			if (wall_dist < 15){
+				updateMap(nextPos, nextHead, my_map, char_to_position);
+			} else if (wall_dist <= 45){
+				//move_until_wall();
+				updateMap(nextPos, nextHead, my_map, char_to_position);
+				curPos = optPath.get(optPath.size()-1);
+			} else {
+				//move_1_grid();
+				curPos = optPath.get(optPath.size()-1);
+			}
+
+			// Update curPos and curHead
+			curHead = nextHead;
+			//curPos = nextPos;
+			printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
+			counter++;
+		}
 		
 	}
+	
+	//Bad code because I don't know how to index character arrays...
+	public static void next_direction(char curHead){
+		
+		switch(curHead){
+		
+			case 'U':
+				curHead = 'L';
+			case 'R':
+				curHead = 'U';
+			case 'D':
+				curHead = 'R';
+			case 'L':
+				curHead = 'D';
+		}
+	}
+			
+	public static void turnHead(char curHead, int[] curCoord, int[] nextCoord){
+		/* Use the difference between the current position and desired position (must be adjacent)
+			 to determine the heading and turn it. Return nextHead
+			 Examples:
+			 * cur: (0,0) --> next: (0,1): nextHead = R
+			 * cur: (0,0) --> next: (1,0): nextHead = D
+			 * cur: (0,1) --> next: (0,0): nextHead = L
+			 * cur: (1,0) --> next: (0,0): nextHead = U
+		 */
+		
+		//char nextHeadLoc;
+
+		 // determine which direction it should be heading
+		 if(curCoord[0] == nextCoord[0]){
+			 if (curCoord[1] == nextCoord[1] + 2){
+				 nextHead = 'L';
+			 }
+			 else if (curCoord[1] == nextCoord[1] - 2){
+				 nextHead = 'R';
+			 }
+		 }
+		 else if(curCoord[1] == nextCoord[1]){
+			 if (curCoord[0] == nextCoord[0] + 2){
+				 nextHead = 'U';
+			 }
+			 else if (curCoord[0] == nextCoord[0]-2){
+				 nextHead = 'D';
+			 }
+		 }
+
+		 // determine how it should turn to that direction and execute the turn
+		 int curHeadIndex = arr_to_int(curHead);
+		 int nextHeadIndex = arr_to_int(nextHead);
+		 
+		 int direction = nextHeadIndex - curHeadIndex;
+		 switch (direction) {
+			 case 1: case -3: next_direction(curHead); next_direction(curHead); next_direction(curHead); break;
+			 case 2: case -2: next_direction(curHead); next_direction(curHead); break;
+			 case 3: case -1: next_direction(curHead); break;
+			 default: break;
+		 }
+	}
+
+	public static int arr_to_int(char input){
+		
+		int dir_int = -1;
+		switch (input){
+			case 'U':
+				dir_int = 1;
+			case 'R':
+				dir_int = 2;
+			case 'D':
+				dir_int = 3;
+			case 'L':
+				dir_int = 4;
+		}
+	return dir_int;
+		
+	}
+	
+
+	public static boolean ifGoal(char curPos,char curHead,char goalPos,char goalHead){
+		/* return true and execute the turning if goal is reached
+			 return false if not
+		 */
+		if(curPos != goalPos){
+			return false;
+		}
+		else{
+			System.out.println("Goal is reached!");
+			int curHeadIndex = arr_to_int(curHead);
+			int goalHeadIndex = arr_to_int(goalHead);
+			int direction = goalHeadIndex - curHeadIndex;
+			switch (direction) {
+				case 1: case -3: next_direction(curHead); next_direction(curHead); next_direction(curHead); break;
+				case 2: case -2: next_direction(curHead); next_direction(curHead); break;
+				case 3: case -1: next_direction(curHead); break;
+				default: break;
+			}
+			return true;
+		}
+	}
+	
 	
 	public static void initializeMap(){ 
 		/* Map should look like:
