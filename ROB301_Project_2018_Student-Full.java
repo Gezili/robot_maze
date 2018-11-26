@@ -52,40 +52,41 @@ public class ROB301_Project_2018_Student {
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
 		Button.waitForAnyPress();
-		
-		while (ifGoal(curPos, curHead, goalPos, goalHead) == false){
-			//
-			/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
-			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
-			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
-			System.out.println("Optimal Path: " + optPath);
-			printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
+		while(!Button.ENTER.isDown()){
+			while (ifGoal(curPos, curHead, goalPos, goalHead) == false){
+				//
+				/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
+				g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
+				optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
+				System.out.println("Optimal Path: " + optPath);
+				printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
-			//Insert your code here...
-			*/
-			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
-			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
-			System.out.println("Optimal Path: " + optPath);
-			curCoord = char_to_position.get(curPos);
-			nextPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
-			nextCoord = char_to_position.get(nextPos);
-			turnHead(curHead, curCoord, nextCoord); // updates the nextHead and turnd it
-			// Move (i.e. from currPos to nextPos)
-			wall_dist = reading.get_sonic_reading();
-			if (wall_dist < 15){
-				updateMap(nextPos, nextHead, my_map, char_to_position);
-			} else if (wall_dist <= 45){
-				control.move_until_wall();
-				updateMap(nextPos, nextHead, my_map, char_to_position);
-				curPos = nextPos;
-			} else {
-				control.move_1_grid();
-				curPos = nextPos;
+				//Insert your code here...
+				*/
+				g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
+				optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
+				System.out.println("Optimal Path: " + optPath);
+				curCoord = char_to_position.get(curPos);
+				nextPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
+				nextCoord = char_to_position.get(nextPos);
+				turnHead(curHead, curCoord, nextCoord); // updates the nextHead and turnd it
+				// Move (i.e. from currPos to nextPos)
+				wall_dist = reading.get_sonic_reading();
+				if (wall_dist < 15){
+					updateMap(nextPos, nextHead, my_map, char_to_position);
+				} else if (wall_dist <= 45){
+					control.move_until_wall();
+					updateMap(nextPos, nextHead, my_map, char_to_position);
+					curPos = nextPos;
+				} else {
+					control.move_1_grid();
+					curPos = nextPos;
+				}
+
+				curHead = nextHead;
 			}
-
-			curHead = nextHead;
+			printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 		}
-		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 	}
 
 	public static boolean ifGoal(char curPos,char curHead, char goalPos,char goalHead){
