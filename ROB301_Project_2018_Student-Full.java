@@ -105,7 +105,7 @@ public class ROB301_Project_2018_Student {
 		}
 	}
 
-	public static char turnHead(char curHead int[] curCoord, int[] nextCoord){
+	public static char turnHead(char curHead, int[] curCoord, int[] nextCoord){
 		/* Use the difference between the current position and desired position (must be adjacent)
 			 to determine the heading and turn it. Return nextHead
 			 Examples:
