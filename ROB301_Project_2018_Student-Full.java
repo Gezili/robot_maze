@@ -619,3 +619,45 @@ class run_robot{
 		}
   }
 }
+
+public class robot_reading{
+	
+	//public static final EV3ColorSensor color = new EV3ColorSensor(SensorPort.S3);
+	//public static final EV3UltrasonicSensor sonic = new EV3UltrasonicSensor(SensorPort.S2);
+
+	public float get_color_reading() {
+		
+		//int sampleSize = color.sampleSize();
+		float[] idsample = new float[sampleSize];
+		//color.getRedMode().fetchSample(idsample, 0);
+		LCD.clear();
+		return idsample[0];
+		
+	}
+
+	public float get_sonic_reading() {
+	
+		int sampleSize = sonic.sampleSize();
+		float[] sonicsample = new float[sampleSize];
+		sonic.fetchSample(sonicsample, 0);
+		LCD.clear();
+		return sonicsample[0]*100;
+	}
+		
+	public void turn_90() {
+		Motor.B.rotate(92);
+		Motor.C.rotate(-92);
+	}
+		
+		public void turn(double lspeed, double rspeed) {
+			
+			int left_speed_round = (int) lspeed;
+			int right_speed_round = (int) rspeed;
+			
+			Motor.B.setSpeed(left_speed_round);
+			Motor.B.forward();
+			Motor.C.setSpeed(right_speed_round);
+			Motor.C.forward();
+		}
+	}
+}
