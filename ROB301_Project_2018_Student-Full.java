@@ -38,6 +38,9 @@ public class ROB301_Project_2018_Student {
 		System.out.println("Optimal Path: " + optPath);
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
+		robot_control control = new robot_control();
+		run_robot run = new run_robot();
+
 		while (ifGoal == false){
 			//
 			/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
@@ -52,7 +55,7 @@ public class ROB301_Project_2018_Student {
 			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
 			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 			System.out.println("Optimal Path: " + optPath);
-			nextPos = optPath[0];
+			nextPos = optPath[optPath.length - 1];
 			nextHead = turnHead(curHead, curPos, nextPos); // write function to update curHead ** Currenly this update already turns it
 			// Move one grid forward along it (i.e. from currPos to nextPos)
 
@@ -78,12 +81,12 @@ public class ROB301_Project_2018_Student {
 			goalHeadIndex = listHead.indexOf(goalHead);
 			direction = goalHeadIndex - curHeadIndex;
 			switch (direction) {
-				case 1: case -1: case 2: case -2: robot_reading.turn_90(direction);
+				case 1: case -1: case 2: case -2: control.turn_90(direction);
 					break;
 				case 3:
-					robot_reading.turn_90(-1);
+					control.turn_90(-1);
 					break;
-				case -3: robot_reading.turn_90(1);
+				case -3: control.turn_90(1);
 					break;
 				default: break;
 			}
@@ -102,7 +105,6 @@ public class ROB301_Project_2018_Student {
 		 */
 		 int [] curCoord = char_to_postion.get(curPos);
 		 int [] nextCoord = char_to_postion.get(nextPos);
-		 int [] deltaCoord = [[ - ], [curCoord[1] - nextCoord[1]]];
 
 		 // determine which direction it should be heading
 		 if(curCoord[0] == nextCoord[0]){
@@ -127,12 +129,12 @@ public class ROB301_Project_2018_Student {
 		 nextHeadIndex = listHead.indexOf(nextHead);
 		 direction = nextHeadIndex - curHeadIndex;
 		 switch (direction) {
-			 case 1: case -1: case 2: case -2: robot_reading.turn_90(direction);
+			 case 1: case -1: case 2: case -2: control.turn_90(direction);
 				 break;
 			 case 3:
-				 robot_reading.turn_90(-1);
+				 control.turn_90(-1);
 				 break;
-			 case -3: robot_reading.turn_90(1);
+			 case -3: control.turn_90(1);
 				 break;
 			 default: break;
 		 }
@@ -566,7 +568,7 @@ class Graph {
 }
 
 //---------------------------------------------------------------------------------------------------------------
-//lots of work needs to be done here 
+//lots of work needs to be done here
 //---------------------------------------------------------------------------------------------------------------
 class run_robot{
 
@@ -583,20 +585,20 @@ class run_robot{
 	robot_control robotcontrol = new robot_control();
 
     public void control_loop(){
-        
+
         //placeholder functions - update_map, get_robot_heading, update_charlist, get_robot_position, robot_heading
         while (robot_position(x) != coord_final_x and robot_position(y) != coord_final_y){
-			
+
 			while (get_robot_heading != robot_heading){
 				robotcontrol.turn_90();
 				sonic_reading = robotreading.get_sonic_reading();
 				if (sonic_reading < 15){
-					update_map();	
+					update_map();
 					//replace with actual function names
 					robot_heading = get_new_heading();
 					next_loc = update_map.get_new_loc();
 				}
-				
+
 			}
 
 			wall_dist = robotreading.get_sonic_reading();
