@@ -216,20 +216,20 @@ public class ROB301_Project_2018_Student {
 		int wall_y = 0;
 
 		if(curHead == 'U'){
-			wall_x = curCoord[0];
-			wall_y = curCoord[1]+1;
-		}
-		else if(curHead == 'D'){
-			wall_x = curCoord[0];
-			wall_y = curCoord[1]-1;
-		}
-		else if(curHead == 'L'){
 			wall_x = curCoord[0]-1;
 			wall_y = curCoord[1];
 		}
-		else if(curHead == 'R'){
+		else if(curHead == 'D'){
 			wall_x = curCoord[0]+1;
 			wall_y = curCoord[1];
+		}
+		else if(curHead == 'L'){
+			wall_x = curCoord[0];
+			wall_y = curCoord[1]-1;
+		}
+		else if(curHead == 'R'){
+			wall_x = curCoord[0];
+			wall_y = curCoord[1]+1;
 		}
 		if(map[wall_x][wall_y] != 'Z'){
 			map[wall_x][wall_y] = '1';
