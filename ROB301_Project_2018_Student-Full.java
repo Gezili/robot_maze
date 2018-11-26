@@ -40,7 +40,7 @@ public class ROB301_Project_2018_Student {
 		char goalPos = 'Y'; // Final position the robot needs to reach
 		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
 
-	  List<Character> optPath; // Optimal path
+	  	List<Character> optPath; // Optimal path
 
 		double wall_dist;
 
@@ -51,7 +51,8 @@ public class ROB301_Project_2018_Student {
 		System.out.println("Optimal Path: " + optPath);
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
-
+		Button.waitForAnyPress();
+		
 		while (ifGoal(curPos, curHead, goalPos, goalHead) == false){
 			//
 			/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
