@@ -88,8 +88,8 @@ public class ROB301_Project_2018_Student {
 		/* return true and execute the turning if goal is reached
 			 return false if not
 		 */
-		char curHeadIndex;
-		char goalHeadIndex;
+		int curHeadIndex;
+		int goalHeadIndex;
 		int direction;
 
 		if(curPos != goalPos){
@@ -97,8 +97,8 @@ public class ROB301_Project_2018_Student {
 		}
 		else{
 			System.out.println("Goal is reached!");
-			curHeadIndex = listHead.asList(listHead).indexOf(curHead);
-			goalHeadIndex = listHead.asList(listHead).indexOf(goalHead);
+			curHeadIndex = Arrays.asList(listHead).indexOf(curHead);
+			goalHeadIndex = Arrays.asList(listHead).indexOf(goalHead);
 			direction = goalHeadIndex - curHeadIndex;
 			switch (direction) {
 				case 1: case -3: control.turn_90(); control.turn_90(); control.turn_90(); break;
@@ -119,10 +119,10 @@ public class ROB301_Project_2018_Student {
 			 * cur: (0,1) --> next: (0,0): nextHead = L
 			 * cur: (1,0) --> next: (0,0): nextHead = U
 		 */
-		 char curHeadIndex;
-		 char nextHeadIndex;
+		 int curHeadIndex;
+		 int nextHeadIndex;
 		 int direction;
-		 
+
 		 // determine which direction it should be heading
 		 if(curCoord[0] == nextCoord[0]){
 			 if (curCoord[1] == nextCoord[1]+1){
@@ -142,8 +142,8 @@ public class ROB301_Project_2018_Student {
 		 }
 
 		 // determine how it should turn to that direction and execute the turn
-		 curHeadIndex = listHead.asList(listHead).indexOf(curHead);
-		 nextHeadIndex = listHead.asList(listHead).indexOf(nextHead);
+		 curHeadIndex = Arrays.asList(listHead).indexOf(curHead);
+		 nextHeadIndex = Arrays.asList(listHead).indexOf(nextHead);
 		 direction = nextHeadIndex - curHeadIndex;
 		 switch (direction) {
 			 case 1: case -3: control.turn_90(); control.turn_90(); control.turn_90(); break;
