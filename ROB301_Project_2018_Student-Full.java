@@ -574,72 +574,41 @@ class run_robot{
 
 	double sonic_reading;
 
-	char coord_final = '';
-	char coord_init = '';
-
-	char coord_robot;
-	char desired_coord_robot;
-
-	char robot_heading;
-	char desired_robot_heading;
-	char next_loc;
+	int coord_final_x = 5;
+	int coord_final_y = 5;
+	int coord_init_x = 1;
+	int coord_init_y = 1;
+	??? robot_heading = ???;
+	??? next_loc = ???;
 
 	robot_reading robotreading = new robot_reading();
 	robot_control robotcontrol = new robot_control();
 
-	//TODO I'm not sure what classes are required to interface with the pathfinding - please declare them here
-
     public void control_loop(){
 
-<<<<<<< HEAD
-        //placeholder functions - update_map, get_robot_heading, update_charlist, get_robot_position, robot_heading
-        while (robot_position(x) != coord_final_x and robot_position(y) != coord_final_y){
+      //placeholder functions - update_map, get_robot_heading, update_charlist, get_robot_position, robot_heading
+      while (robot_position(x) != coord_final_x and robot_position(y) != coord_final_y){
 
 			while (get_robot_heading != robot_heading){
-=======
-		coord_robot = coord_init;
-        
-        //placeholder functions - update_map, get_robot_heading, update_charlist, get_robot_position, robot_heading
-        while (coord_robot != coord_final){
-			
-			while (desired_robot_heading != robot_heading){
->>>>>>> 097a3c55de4873d08d37a5ccfaba3e340df6fbdc
 				robotcontrol.turn_90();
 				sonic_reading = robotreading.get_sonic_reading();
-				robot_heading = get_new_heading();
-
 				if (sonic_reading < 15){
 					update_map();
 					//replace with actual function names
-					desired_robot_heading = get_desired_robot_heading();
+					robot_heading = get_new_heading();
+					next_loc = update_map.get_new_loc();
 				}
-<<<<<<< HEAD
-
-=======
-			
->>>>>>> 097a3c55de4873d08d37a5ccfaba3e340df6fbdc
 			}
-			
-			//After previous loop we are in the correct heading
-			wall_dist = robotreading.get_sonic_reading();
 
+			wall_dist = robotreading.get_sonic_reading();
 			if (wall_dist <= 45){
 				robot_control.move_until_wall();
 				update_map();
+				update_position();
 			} else {
 				robot_control.move_1_grid();
+				update_position();
 			}
-		coord_robot = update_position();
-		robot_heading = update_heading();
-		//update with robot's new position
-		update_map();
 		}
-
-
-
-
-    }
-
-
-
+  }
 }
