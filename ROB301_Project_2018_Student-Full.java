@@ -32,7 +32,7 @@ public class ROB301_Project_2018_Student {
 		int[] curCoord = new int [2];
 		int[] nextCoord = new int [2];
 		List<Character> optPath; // Optimal path
-		double sonic_reading;
+		double wall_dist;
 
 		robot_reading reading = new robot_reading();
 		robot_control control = new robot_control();
@@ -66,10 +66,10 @@ public class ROB301_Project_2018_Student {
 			// Move (i.e. from currPos to nextPos)
 			wall_dist = reading.get_sonic_reading();
 			if (wall_dist < 15){
-				updateMap(nextPos, nextHead, my_map);
+				updateMap(nextPos, nextHead, my_map, char_to_position);
 			} else if (wall_dist <= 45){
 				control.move_until_wall();
-				updateMap(nextPos, nextHead, my_map);
+				updateMap(nextPos, nextHead, my_map, char_to_position);
 			} else {
 				control.move_1_grid();
 			}
