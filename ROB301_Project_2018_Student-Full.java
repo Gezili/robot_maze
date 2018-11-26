@@ -45,7 +45,7 @@ public class ROB301_Project_2018_Student {
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
 
-		while (ifGoal == false){
+		while (ifGoal() == false){
 			//
 			/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
 			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
