@@ -16,7 +16,7 @@ import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 
-public class ROB301_Project_2018_Student {
+public class ROB301_Project_2018_Student_Simulation {
 	static int asci_count = 0; // ASCII counter
 	static int[] coord = new int [2]; // Keep track of coordinates
 	static Map<Character, int[]> char_to_position; // Hash map maps node with given name to coordinate on map
@@ -311,7 +311,7 @@ public class ROB301_Project_2018_Student {
 	}
 }
 
-public class robot_control{
+class robot_control{
 
 	double sensor_data; //this is the value returned by sensor
 	long time_start;
@@ -582,7 +582,7 @@ class Graph {
 	}
 }
 
-public class robot_reading{
+class robot_reading{
 
 	//public static final EV3ColorSensor color = new EV3ColorSensor(SensorPort.S3);
 	//public static final EV3UltrasonicSensor sonic = new EV3UltrasonicSensor(SensorPort.S2);
@@ -624,7 +624,7 @@ public class robot_reading{
 	}
 }
 
-public class pidcontroller{
+class pidcontroller{
 	
 	double k_p = 250;
 	double k_i = 5;
