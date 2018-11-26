@@ -119,7 +119,10 @@ public class ROB301_Project_2018_Student {
 			 * cur: (0,1) --> next: (0,0): nextHead = L
 			 * cur: (1,0) --> next: (0,0): nextHead = U
 		 */
-
+		 char curHeadIndex;
+		 char nextHeadIndex;
+		 int direction;
+		 
 		 // determine which direction it should be heading
 		 if(curCoord[0] == nextCoord[0]){
 			 if (curCoord[1] == nextCoord[1]+1){
