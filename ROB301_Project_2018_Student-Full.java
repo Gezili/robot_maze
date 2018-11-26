@@ -33,6 +33,7 @@ public class ROB301_Project_2018_Student {
 		char curHead = 'R'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
 		int[] curCoord = new int [2];
 		char nextPos;
+		char nextHead = 'Z';
 		int[] nextCoord = new int [2];
 		char goalPos = 'Y'; // Final position the robot needs to reach
 		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
@@ -109,7 +110,7 @@ public class ROB301_Project_2018_Student {
 		}
 	}
 
-	public static char turnHead(char curHead, int[] curCoord, int[] nextCoord){
+	public static char turnHead(char curHead, char nextHead, int[] curCoord, int[] nextCoord){
 		/* Use the difference between the current position and desired position (must be adjacent)
 			 to determine the heading and turn it. Return nextHead
 			 Examples:
@@ -118,7 +119,6 @@ public class ROB301_Project_2018_Student {
 			 * cur: (0,1) --> next: (0,0): nextHead = L
 			 * cur: (1,0) --> next: (0,0): nextHead = U
 		 */
-		 char nextHead;
 		 int curHeadIndex;
 		 int nextHeadIndex;
 		 int direction;
