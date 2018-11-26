@@ -97,8 +97,8 @@ public class ROB301_Project_2018_Student {
 		}
 		else{
 			System.out.println("Goal is reached!");
-			curHeadIndex = listHead.indexOf(curHead);
-			goalHeadIndex = listHead.indexOf(goalHead);
+			curHeadIndex = listHead.asList(listHead).indexOf(curHead);
+			goalHeadIndex = listHead.asList(listHead).indexOf(goalHead);
 			direction = goalHeadIndex - curHeadIndex;
 			switch (direction) {
 				case 1: case -3: control.turn_90(); control.turn_90(); control.turn_90(); break;
@@ -139,8 +139,8 @@ public class ROB301_Project_2018_Student {
 		 }
 
 		 // determine how it should turn to that direction and execute the turn
-		 curHeadIndex = listHead.indexOf(curHead);
-		 nextHeadIndex = listHead.indexOf(nextHead);
+		 curHeadIndex = listHead.asList(listHead).indexOf(curHead);
+		 nextHeadIndex = listHead.asList(listHead).indexOf(nextHead);
 		 direction = nextHeadIndex - curHeadIndex;
 		 switch (direction) {
 			 case 1: case -3: control.turn_90(); control.turn_90(); control.turn_90(); break;
