@@ -59,7 +59,7 @@ public class ROB301_Project_2018_Student {
 			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 			System.out.println("Optimal Path: " + optPath);
 			curCoord = char_to_postion.get(curPos);
-			nextPos = optPath[optPath.length - 1];
+			nextPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
 			nextCoord = char_to_postion.get(nextPos);
 			nextHead = turnHead(curHead, curCoord, nextCoord); // write function to update curHead ** Currenly this update already turns it
 
