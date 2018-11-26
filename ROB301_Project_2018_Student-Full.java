@@ -22,22 +22,26 @@ public class ROB301_Project_2018_Student {
 	static Map<Character, int[]> char_to_position; // Hash map maps node with given name to coordinate on map
 	static char[][] my_map; // Stores maze map
 	static char[] listHead = {'U', 'R', 'D', 'L'}; // List of 4 possible Headings
-
+	static char nextHead = 'Z'; // Initialize nextHead which later gets updated
 	static robot_reading reading = new robot_reading();
 	static robot_control control = new robot_control();
 	static run_robot run = new run_robot();
 
 	public static void main(String[] args) {
 		int sizeMapX = 11; int sizeMapY = 11;
+
 		char curPos = 'A'; // Start position of robot (to be updated)
 		char curHead = 'R'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
 		int[] curCoord = new int [2];
+
 		char nextPos;
-		char nextHead = 'Z';
 		int[] nextCoord = new int [2];
+
 		char goalPos = 'Y'; // Final position the robot needs to reach
 		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
-		List<Character> optPath; // Optimal path
+
+	  List<Character> optPath; // Optimal path
+
 		double wall_dist;
 
 
@@ -64,8 +68,7 @@ public class ROB301_Project_2018_Student {
 			curCoord = char_to_position.get(curPos);
 			nextPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
 			nextCoord = char_to_position.get(nextPos);
-			nextHead = turnHead(curHead,  nextHead, curCoord, nextCoord); // write function to update curHead ** Currenly this update already turns it
-
+			turnHead(curHead, curCoord, nextCoord); // updates the nextHead and turnd it
 			// Move (i.e. from currPos to nextPos)
 			wall_dist = reading.get_sonic_reading();
 			if (wall_dist < 15){
@@ -73,13 +76,13 @@ public class ROB301_Project_2018_Student {
 			} else if (wall_dist <= 45){
 				control.move_until_wall();
 				updateMap(nextPos, nextHead, my_map, char_to_position);
+				curPos = nextPos;
 			} else {
 				control.move_1_grid();
+				curPos = nextPos;
 			}
 
-			// Update curPos and curHead
 			curHead = nextHead;
-			curPos = nextPos;
 		}
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 	}
@@ -88,18 +91,15 @@ public class ROB301_Project_2018_Student {
 		/* return true and execute the turning if goal is reached
 			 return false if not
 		 */
-		int curHeadIndex;
-		int goalHeadIndex;
-		int direction;
 
 		if(curPos != goalPos){
 			return false;
 		}
 		else{
 			System.out.println("Goal is reached!");
-			curHeadIndex = Arrays.asList(listHead).indexOf(curHead);
-			goalHeadIndex = Arrays.asList(listHead).indexOf(goalHead);
-			direction = goalHeadIndex - curHeadIndex;
+			int curHeadIndex = Arrays.asList(listHead).indexOf(curHead);
+			int goalHeadIndex = Arrays.asList(listHead).indexOf(goalHead);
+			int direction = goalHeadIndex - curHeadIndex;
 			switch (direction) {
 				case 1: case -3: control.turn_90(); control.turn_90(); control.turn_90(); break;
 				case 2: case -2: control.turn_90(); control.turn_90(); break;
@@ -110,7 +110,7 @@ public class ROB301_Project_2018_Student {
 		}
 	}
 
-	public static char turnHead(char curHead, char nextHead, int[] curCoord, int[] nextCoord){
+	public static void turnHead(char curHead, int[] curCoord, int[] nextCoord){
 		/* Use the difference between the current position and desired position (must be adjacent)
 			 to determine the heading and turn it. Return nextHead
 			 Examples:
@@ -119,9 +119,6 @@ public class ROB301_Project_2018_Student {
 			 * cur: (0,1) --> next: (0,0): nextHead = L
 			 * cur: (1,0) --> next: (0,0): nextHead = U
 		 */
-		 int curHeadIndex;
-		 int nextHeadIndex;
-		 int direction;
 
 		 // determine which direction it should be heading
 		 if(curCoord[0] == nextCoord[0]){
@@ -142,16 +139,15 @@ public class ROB301_Project_2018_Student {
 		 }
 
 		 // determine how it should turn to that direction and execute the turn
-		 curHeadIndex = Arrays.asList(listHead).indexOf(curHead);
-		 nextHeadIndex = Arrays.asList(listHead).indexOf(nextHead);
-		 direction = nextHeadIndex - curHeadIndex;
+		 int curHeadIndex = Arrays.asList(listHead).indexOf(curHead);
+		 int nextHeadIndex = Arrays.asList(listHead).indexOf(nextHead);
+		 int direction = nextHeadIndex - curHeadIndex;
 		 switch (direction) {
 			 case 1: case -3: control.turn_90(); control.turn_90(); control.turn_90(); break;
 			 case 2: case -2: control.turn_90(); control.turn_90(); break;
 			 case 3: case -1: control.turn_90(); break;
 			 default: break;
 		 }
-		return nextHead;
 	}
 
 	public static void initializeMap(){
