@@ -23,10 +23,10 @@ public class ROB301_Project_2018_Student_Simulation {
 	static char[][] my_map; // Stores maze map
 	static char[] listHead = {'U', 'R', 'D', 'L'}; // List of 4 possible Headings
 	static char nextHead = 'Z';
-	
+
 	static int[] sonicdata = {75, 45, 10, 45, 10, 45, 45};
-	
-	public static void main(String[] args) {  
+
+	public static void main(String[] args) {
 		int sizeMapX = 11; int sizeMapY = 11;
 		char curPos = 'A'; // Start position of robot (to be updated)
 		char curHead = 'U'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
@@ -36,20 +36,20 @@ public class ROB301_Project_2018_Student_Simulation {
 		int[] nextCoord = new int[2];
 		List<Character> optPath; // Optimal path
 		char nextPos;
-		
+		char FinalHead = 'F';
 		double wall_dist;
-		
+
 		initializeMap(); // Initialize map with no walls
 		Graph g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
 		optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 		System.out.println("Optimal Path: " + optPath);
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
-		
-		
+
+
 		int counter = 0;
-		
-		while (ifGoal(curPos, curHead, goalPos, goalHead) == false){
-			
+
+		while (FinalHead == 'F'){
+
 			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
 			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 			System.out.println("Optimal Path: " + optPath);
@@ -59,7 +59,7 @@ public class ROB301_Project_2018_Student_Simulation {
 			turnHead(curHead, curCoord, nextCoord); // write function to update curHead ** Currently this update already turns it
 			System.out.println(curHead);
 			System.out.println(nextHead);
-			
+
 			System.out.println(curCoord[0]);
 			System.out.println(curCoord[1]);
 			System.out.println(nextCoord[0]);
@@ -82,16 +82,16 @@ public class ROB301_Project_2018_Student_Simulation {
 			//curPos = nextPos;
 			printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 			counter++;
+
+			FinalHead = ifGoal(curPos, curHead, goalPos, goalHead);
 		}
-		
-		System.out.println(curHead);
-		
+		System.out.println(FinalHead);
 	}
-	
+
 	//Bad code because I don't know how to index character arrays...
-	public static void next_direction(char curHead){
-		
-		
+	public static char next_direction(char curHead){
+
+
 		if (curHead == 'U'){
 			curHead = 'L';
 		} else if (curHead == 'R'){
@@ -103,7 +103,7 @@ public class ROB301_Project_2018_Student_Simulation {
 		}
 		/*
 		switch(curHead){
-		
+
 			case 'U':
 				curHead = 'L';
 			case 'R':
@@ -114,8 +114,9 @@ public class ROB301_Project_2018_Student_Simulation {
 				curHead = 'D';
 		}
 		*/
+		return curHead;
 	}
-			
+
 	public static void turnHead(char curHead, int[] curCoord, int[] nextCoord){
 		/* Use the difference between the current position and desired position (must be adjacent)
 			 to determine the heading and turn it. Return nextHead
@@ -125,7 +126,7 @@ public class ROB301_Project_2018_Student_Simulation {
 			 * cur: (0,1) --> next: (0,0): nextHead = L
 			 * cur: (1,0) --> next: (0,0): nextHead = U
 		 */
-		
+
 		//char nextHeadLoc;
 
 		 // determine which direction it should be heading
@@ -149,21 +150,21 @@ public class ROB301_Project_2018_Student_Simulation {
 		 // determine how it should turn to that direction and execute the turn
 		 int curHeadIndex = arr_to_int(curHead);
 		 int nextHeadIndex = arr_to_int(nextHead);
-		 
+
 		 int direction = nextHeadIndex - curHeadIndex;
 		 switch (direction) {
-			 case 1: case -3: next_direction(curHead); next_direction(curHead); next_direction(curHead); break;
-			 case 2: case -2: next_direction(curHead); next_direction(curHead); break;
-			 case 3: case -1: next_direction(curHead); break;
+			 case 1: case -3: curHead=next_direction(curHead); curHead=next_direction(curHead); curHead=next_direction(curHead); break;
+			 case 2: case -2: curHead=next_direction(curHead); curHead=next_direction(curHead); break;
+			 case 3: case -1: curHead=next_direction(curHead); break;
 			 default: break;
 		 }
 	}
 
 	public static int arr_to_int(char input){
-		
+
 		System.out.println("CHARACTER:" + input);
 		int dir_int = -1;
-		
+
 		if (input == 'U'){
 			dir_int = 1;
 		} else if (input == 'R'){
@@ -173,7 +174,7 @@ public class ROB301_Project_2018_Student_Simulation {
 		} else if (input == 'L'){
 			dir_int = 4;
 		}
-		
+
 		/*
 		switch (input){
 			case 'U':
@@ -187,16 +188,16 @@ public class ROB301_Project_2018_Student_Simulation {
 		}
 		*/
 	return dir_int;
-		
-	}
-	
 
-	public static boolean ifGoal(char curPos,char curHead,char goalPos,char goalHead){
+	}
+
+
+	public static char ifGoal(char curPos,char curHead,char goalPos,char goalHead){
 		/* return true and execute the turning if goal is reached
 			 return false if not
 		 */
 		if(curPos != goalPos){
-			return false;
+			return 'F';
 		}
 		else{
 			System.out.println("Goal is reached!");
@@ -209,18 +210,18 @@ public class ROB301_Project_2018_Student_Simulation {
 			int direction = goalHeadIndex - curHeadIndex;
 			System.out.println(direction);
 			switch (direction) {
-				case 1: case -3: next_direction(curHead); next_direction(curHead); next_direction(curHead); System.out.println("turned 3 times"); break;
-				case 2: case -2: next_direction(curHead); next_direction(curHead); System.out.println("turned 2 times"); break;
-				case 3: case -1: next_direction(curHead); System.out.println("turned 1 times"); break;
-				default: System.out.println("turned NOTHING"); break;
+				 case 1: case -3: curHead=next_direction(curHead); curHead=next_direction(curHead); curHead=next_direction(curHead); break;
+				 case 2: case -2: curHead=next_direction(curHead); curHead=next_direction(curHead); break;
+				 case 3: case -1: curHead=next_direction(curHead); break;
+				 default: break;
 			}
 			System.out.println(curHead);
-			return true;
+			return curHead;
 		}
 	}
-	
-	
-	public static void initializeMap(){ 
+
+
+	public static void initializeMap(){
 		/* Map should look like:
 		 *  ZZZZZZZZZZZ
 			ZA0B0C0D0EZ
@@ -233,15 +234,15 @@ public class ROB301_Project_2018_Student_Simulation {
 			Z0Z0Z0Z0Z0Z
 			ZU0V0W0X0YZ
 			ZZZZZZZZZZZ
-			
+
 			Hash map char_to_postion is like a dictionary relating characters (e.g. 'A') to coordinates (e.g. [1,1]) in my_map
-			
+
 			Note that positive X is right and positive Y is down
 			Z character is a null entry of the map
 			Alphabetical characters from A to Y are potential positions the robot can be in
 			Numerical characters can hold either 0 or 1 (to signify empty space or wall respectively between its neighbouring positions)
 		 */
-		
+
 		char_to_position = new HashMap<Character, int[]>(); // Create hash from character to position in map
 		my_map = new char[11][11]; // Create map from position to character (i.e. regular map)
 		char letter; // Holds character corresponding to a position in the map
@@ -260,7 +261,7 @@ public class ROB301_Project_2018_Student_Simulation {
 		// Populate cells from A-Y where robot will go
 		for(int i = 1; i < 10; i+=2){
 			for(int j =1; j < 10; j +=2){
-				int[] coord = new int [2]; // Must create new array object so since hash map points all keys to same 
+				int[] coord = new int [2]; // Must create new array object so since hash map points all keys to same
 				letter = (char)(65+asci_count);
 				my_map[i][j] = letter;
 				coord [0] = i; coord[1] = j;
@@ -268,7 +269,7 @@ public class ROB301_Project_2018_Student_Simulation {
 				asci_count++;
 			}
 		}
-		
+
 		//Rest of map is padded with Z character to make parsing the map easier to implement
 		for(int i = 2; i < 10; i+=2){
 			for(int j =2; j < 10; j +=2){
@@ -276,18 +277,18 @@ public class ROB301_Project_2018_Student_Simulation {
 			}
 		}
 	}
-	
-	public static void updateMap(char curPos, char curHead, char[][] map, Map<Character, int[]> char_to_position){ 
+
+	public static void updateMap(char curPos, char curHead, char[][] map, Map<Character, int[]> char_to_position){
 		/***
 		 * Inputs: current Position, current Heading
 		 * Outputs: None
-		 * Function: Use current position and heading to correctly add a wall to the map my_map 
+		 * Function: Use current position and heading to correctly add a wall to the map my_map
 		***/
-		
+
 		// Insert your code here...
 		int[] curCoord = new int[2];
 		curCoord = char_to_position.get(curPos);
-		
+
 		int wall_x = 0;
 		int wall_y = 0;
 
@@ -311,8 +312,8 @@ public class ROB301_Project_2018_Student_Simulation {
 			map[wall_x][wall_y] = '1';
 		}
 	}
-	
-	public static Graph getGraph(char[][] map, int sizeX, int sizeY, Map<Character, int[]> char_to_position){ 
+
+	public static Graph getGraph(char[][] map, int sizeX, int sizeY, Map<Character, int[]> char_to_position){
 		// Iterate through each robot position of the map
 		char[] neighbours;
 		Graph g = new Graph();
@@ -334,21 +335,21 @@ public class ROB301_Project_2018_Student_Simulation {
 		}
 		return g;
 	}
-	
+
 	public static char[] getNeighbours(char letter, char[][] map, Map<Character, int[]> char_to_position){
 		/***
 		 * Inputs: position (char identifier of position in map we want to get the neighbours of)
 		 * 		   map (my_map variable above)
 		 * 		   char_to_position (hash map, see explanation in initializaMap() )
 		 * Outputs: character array size between 1 and 4 of the neighbours (e.g. if we query H, return char will be 'C','I','M','G')
-		 * Function: Return neighbors to queried node 
+		 * Function: Return neighbors to queried node
 		***/
-		
+
 		char[] neighbours = {'Z','Z','Z','Z'}; // Initialize neighbours to null type
 		int[] coord = new int[2];
 		coord = char_to_position.get(letter);
 		int n_index = 0;
-		
+
 		//Check if any of the four neighbouring positions are free for the robot to travel to
 		if(map[coord[0]-1][coord[1]] == '0'){
 			neighbours[n_index] = map[coord[0]-2][coord[1]];
@@ -365,10 +366,10 @@ public class ROB301_Project_2018_Student_Simulation {
 		if(map[coord[0]][coord[1]+1] == '0'){
 			neighbours[n_index] = map[coord[0]][coord[1]+2];
 		}
-		
+
 		return neighbours;
 	}
-	
+
 	public static void printMap(char[][] map){
 		for(int i = 0; i < 11; i++){
 			for(int j =0; j < 11; j ++){
@@ -381,10 +382,10 @@ public class ROB301_Project_2018_Student_Simulation {
 
 // DO NOT CHANGE FOLLOWING CODE. Path planning implementation
 class Vertex implements Comparable<Vertex> {
-	
+
 	private Character id;
 	private Integer distance;
-	
+
 	public Vertex(Character id, Integer distance) {
 		super();
 		this.id = id;
@@ -453,29 +454,29 @@ class Vertex implements Comparable<Vertex> {
 		else
 			return this.getId().compareTo(o.getId());
 	}
-	
+
 }
 
-class Graph { 
+class Graph {
 	public final Map<Character, List<Vertex>> vertices;
-	
+
 	public Graph() {
 		this.vertices = new HashMap<Character, List<Vertex>>();
 	}
-	
+
 	public void addVertex(Character character, List<Vertex> vertex) {
 		this.vertices.put(character, vertex);
 	}
-	
+
 	public void createHashMap(){
-		
+
 	}
-	
+
 	public List<Character> getShortestPath(Character start, Character finish) {
 		final Map<Character, Integer> distances = new HashMap<Character, Integer>();
 		final Map<Character, Vertex> previous = new HashMap<Character, Vertex>();
 		PriorityQueue<Vertex> nodes = new PriorityQueue<Vertex>();
-		
+
 		for(Character vertex : vertices.keySet()) {
 			if (vertex == start) {
 				distances.put(vertex, 0);
@@ -486,7 +487,7 @@ class Graph {
 			}
 			previous.put(vertex, null);
 		}
-		
+
 		while (!nodes.isEmpty()) {
 			Vertex smallest = nodes.poll();
 			if (smallest.getId() == finish) {
@@ -501,13 +502,13 @@ class Graph {
 			if (distances.get(smallest.getId()) == Integer.MAX_VALUE) {
 				break;
 			}
-						
+
 			for (Vertex neighbor : vertices.get(smallest.getId())) {
 				Integer alt = distances.get(smallest.getId()) + neighbor.getDistance();
 				if (alt < distances.get(neighbor.getId())) {
 					distances.put(neighbor.getId(), alt);
 					previous.put(neighbor.getId(), smallest);
-					
+
 					forloop:
 					for(Vertex n : nodes) {
 						if (n.getId() == neighbor.getId()) {
@@ -520,7 +521,7 @@ class Graph {
 				}
 			}
 		}
-		
+
 		return new ArrayList<Character>(distances.keySet());
 	}
 }
