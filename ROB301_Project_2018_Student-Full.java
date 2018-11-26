@@ -21,7 +21,7 @@ public class ROB301_Project_2018_Student {
 	static int[] coord = new int [2]; // Keep track of coordinates
 	static Map<Character, int[]> char_to_position; // Hash map maps node with given name to coordinate on map
 	static char[][] my_map; // Stores maze map
-	static char[] listHead = ['U', 'R', 'D', 'L']; // List of 4 possible Headings
+	static char[] listHead = {'U', 'R', 'D', 'L'}; // List of 4 possible Headings
 
 	public static void main(String[] args) {
 		int sizeMapX = 11; int sizeMapY = 11;
@@ -58,9 +58,9 @@ public class ROB301_Project_2018_Student {
 			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
 			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 			System.out.println("Optimal Path: " + optPath);
-			curCoord = char_to_postion.get(curPos);
+			curCoord = char_to_position.get(curPos);
 			nextPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
-			nextCoord = char_to_postion.get(nextPos);
+			nextCoord = char_to_position.get(nextPos);
 			nextHead = turnHead(curHead, curCoord, nextCoord); // write function to update curHead ** Currenly this update already turns it
 
 			// Move (i.e. from currPos to nextPos)
@@ -158,7 +158,7 @@ public class ROB301_Project_2018_Student {
 			ZU0V0W0X0YZ
 			ZZZZZZZZZZZ
 
-			Hash map char_to_postion is like a dictionary relating characters (e.g. 'A') to coordinates (e.g. [1,1]) in my_map
+			Hash map char_to_position is like a dictionary relating characters (e.g. 'A') to coordinates (e.g. [1,1]) in my_map
 
 			Note that positive X is right and positive Y is down
 			Z character is a null entry of the map
