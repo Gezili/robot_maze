@@ -24,14 +24,14 @@ public class ROB301_Project_2018_Student_Simulation {
 	static char[] listHead = {'U', 'R', 'D', 'L'}; // List of 4 possible Headings
 	static char nextHead = 'Z';
 	
-	static int[] sonicdata = {75, 45};
+	static int[] sonicdata = {75, 45, 10, 45, 10, 45, 45};
 	
 	public static void main(String[] args) {  
 		int sizeMapX = 11; int sizeMapY = 11;
 		char curPos = 'A'; // Start position of robot (to be updated)
 		char curHead = 'U'; // Start orientation of robot (either 'U', 'D', 'L', 'R') (to be updated)
-		char goalPos = 'K'; // Final position the robot needs to reach
-		char goalHead = 'R'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
+		char goalPos = 'P'; // Final position the robot needs to reach
+		char goalHead = 'U'; // Final orientation the robot needs to reach (either 'U', 'D', 'L', 'R')
 		int[] curCoord = new int[2];
 		int[] nextCoord = new int[2];
 		List<Character> optPath; // Optimal path
@@ -45,35 +45,11 @@ public class ROB301_Project_2018_Student_Simulation {
 		System.out.println("Optimal Path: " + optPath);
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 		
-//		my_map[1][6] = '1'; // Add a wall to the map (for demo)
-//		g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
-//		optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
-//		System.out.println("Optimal Path: " + optPath);
-//		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
-		
-		// Insert your code here...
-		
-		/*
-		curPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
-		curHead = 'R';
-		updateMap(curPos, curHead, my_map, char_to_position);//updateMap adds wall in the direction of curHead
-		g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
-		optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
-		System.out.println("Optimal Path: " + optPath);
-		printMap(my_map);
-		*/
 		
 		int counter = 0;
 		
 		while (ifGoal(curPos, curHead, goalPos, goalHead) == false){
-			//
-			/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
-			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
-			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
-			System.out.println("Optimal Path: " + optPath);
-			printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
-			//Insert your code here...
-			*/
+			
 			g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
 			optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
 			System.out.println("Optimal Path: " + optPath);
@@ -108,11 +84,24 @@ public class ROB301_Project_2018_Student_Simulation {
 			counter++;
 		}
 		
+		System.out.println(curHead);
+		
 	}
 	
 	//Bad code because I don't know how to index character arrays...
 	public static void next_direction(char curHead){
 		
+		
+		if (curHead == 'U'){
+			curHead = 'L';
+		} else if (curHead == 'R'){
+			curHead = 'U';
+		} else if (curHead == 'D'){
+			curHead = 'R';
+		} else if (curHead == 'L'){
+			curHead = 'D';
+		}
+		/*
 		switch(curHead){
 		
 			case 'U':
@@ -124,6 +113,7 @@ public class ROB301_Project_2018_Student_Simulation {
 			case 'L':
 				curHead = 'D';
 		}
+		*/
 	}
 			
 	public static void turnHead(char curHead, int[] curCoord, int[] nextCoord){
@@ -171,7 +161,20 @@ public class ROB301_Project_2018_Student_Simulation {
 
 	public static int arr_to_int(char input){
 		
+		System.out.println("CHARACTER:" + input);
 		int dir_int = -1;
+		
+		if (input == 'U'){
+			dir_int = 1;
+		} else if (input == 'R'){
+			dir_int = 2;
+		} else if (input == 'D'){
+			dir_int = 3;
+		} else if (input == 'L'){
+			dir_int = 4;
+		}
+		
+		/*
 		switch (input){
 			case 'U':
 				dir_int = 1;
@@ -182,6 +185,7 @@ public class ROB301_Project_2018_Student_Simulation {
 			case 'L':
 				dir_int = 4;
 		}
+		*/
 	return dir_int;
 		
 	}
@@ -196,15 +200,21 @@ public class ROB301_Project_2018_Student_Simulation {
 		}
 		else{
 			System.out.println("Goal is reached!");
+			System.out.println(curHead);
 			int curHeadIndex = arr_to_int(curHead);
+			System.out.println(curHeadIndex);
+			System.out.println(goalHead);
 			int goalHeadIndex = arr_to_int(goalHead);
+			System.out.println(goalHeadIndex);
 			int direction = goalHeadIndex - curHeadIndex;
+			System.out.println(direction);
 			switch (direction) {
-				case 1: case -3: next_direction(curHead); next_direction(curHead); next_direction(curHead); break;
-				case 2: case -2: next_direction(curHead); next_direction(curHead); break;
-				case 3: case -1: next_direction(curHead); break;
-				default: break;
+				case 1: case -3: next_direction(curHead); next_direction(curHead); next_direction(curHead); System.out.println("turned 3 times"); break;
+				case 2: case -2: next_direction(curHead); next_direction(curHead); System.out.println("turned 2 times"); break;
+				case 3: case -1: next_direction(curHead); System.out.println("turned 1 times"); break;
+				default: System.out.println("turned NOTHING"); break;
 			}
+			System.out.println(curHead);
 			return true;
 		}
 	}
