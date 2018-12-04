@@ -63,21 +63,9 @@ public class FinalProjectTuesday {
 			
 				while (goal == false){
 
-		
-//				System.out.println("START LOOP");
-				
-				//
-				/*my_map[1][6] = '1'; // Add a wall to the map (for demo)
-				g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of initialized map
-				optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
-				System.out.println("Optimal Path: " + optPath);
-				printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
-	
-				//Insert your code here...
-				*/
 				g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
 				optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
-				//System.out.println("Optimal Path: " + optPath);
+	
 				curCoord = char_to_position.get(curPos);
 				nextPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
 				nextCoord = char_to_position.get(nextPos);
@@ -86,7 +74,6 @@ public class FinalProjectTuesday {
 				// Move (i.e. from currPos to nextPos)
 
 				wall_dist = reading.get_sonic_reading();
-				//System.out.println("wall_dist:"+wall_dist);
 				
 				
 				if (wall_dist < 20){
@@ -105,8 +92,6 @@ public class FinalProjectTuesday {
 				if(goal != false){
 					Motor.B.setSpeed(0);
 					Motor.C.setSpeed(0);
-					//Motor.B.stop();
-					//Motor.C.stop();
 				}
 			}
 			
@@ -129,18 +114,6 @@ public class FinalProjectTuesday {
 			dir_int = 4;
 		}
 
-		/*
-		switch (input){
-			case 'U':
-				dir_int = 1;
-			case 'R':
-				dir_int = 2;
-			case 'D':
-				dir_int = 3;
-			case 'L':
-				dir_int = 4;
-		}
-		*/
 	return dir_int;
 
 	}
@@ -155,8 +128,7 @@ public class FinalProjectTuesday {
 		}
 		else{
 			System.out.println("Goal is reached!");
-			// curHeadIndex = Arrays.asList(listHead).indexOf(curHead);
-			// goalHeadIndex = Arrays.asList(listHead).indexOf(goalHead);
+			
 			int curHeadIndex = arr_to_int(curHead);
 			int goalHeadIndex = arr_to_int(goalHead);
 			int direction = goalHeadIndex - curHeadIndex;
@@ -400,9 +372,7 @@ class robot_control{
 
 	public double run(double speed) throws InterruptedException{
 		time_start = System.nanoTime();
-		//sensor_data = robot_reading.get_sonic_reading();
 		System.out.println(robot_distance);
-		//robot_reading.turn(motor_speed, motor_speed);
 		time_end = System.nanoTime();
 		d_t = time_end - time_start;
 		if (start_flag == false){
@@ -425,19 +395,12 @@ class robot_control{
 
 	public void move_1_grid() throws InterruptedException{
 		while (run(100) < grid_length){
-		/*
-			if(Button.ESCAPE.isDown()){
-				break;
-			}
-			*/
 			speed = pid.run();
 		}
 
 		reset_flags();
 		pid.resetpid();
 		}
-
-	//We want this to output a distance (?)
 
 	public static void turn_increment(int direction) throws InterruptedException{
 
@@ -460,19 +423,13 @@ class robot_control{
 		Motor.B.rotate(direction*92, true);
 		Motor.C.rotate(direction*(-92));
 
-//		Thread.sleep((long) (184.090909090*1000/90));
 		Thread.sleep((long) (184.090909090*1000/90));
 	}
 
 	public void move_until_wall(){
 		while(robotreading.get_sonic_reading() >= magic_number_sonic){
-			/*
-			if(Button.ESCAPE.isDown()){
-				break;
-			}
-			*/
+
 			speed = pid.run();
-			//control_run = control.run(grid_length, speed);
 		}
 	}
 	public static void turn(double lspeed, double rspeed) {
