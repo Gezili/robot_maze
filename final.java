@@ -18,7 +18,7 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 
-public class FinalProjectTuesday {
+public class FinalProjectMonday {
 	static int asci_count = 0; // ASCII counter
 	static int[] coord = new int [2]; // Keep track of coordinates
 	static Map<Character, int[]> char_to_position; // Hash map maps node with given name to coordinate on map
@@ -53,19 +53,19 @@ public class FinalProjectTuesday {
 		System.out.println("Optimal Path: " + optPath);
 		printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 
-		
+
 		Button.waitForAnyPress();
-			
+
 		Thread.sleep(500);
 		while(!Button.ENTER.isDown() && goal == false){
 			System.out.println("START LOOP");
-			
-			
+
+
 				while (goal == false){
 
 				g = getGraph(my_map, sizeMapX, sizeMapY, char_to_position); // Create graph out of updated map
 				optPath = g.getShortestPath(curPos, goalPos); // Get optimal path from current position to goal
-	
+
 				curCoord = char_to_position.get(curPos);
 				nextPos = optPath.get(optPath.size()-1);//suppose the robot is able to follow the shortest path
 				nextCoord = char_to_position.get(nextPos);
@@ -74,8 +74,8 @@ public class FinalProjectTuesday {
 				// Move (i.e. from currPos to nextPos)
 
 				wall_dist = reading.get_sonic_reading();
-				
-				
+
+
 				if (wall_dist < 20){
 					updateMap(curPos, nextHead, my_map, char_to_position);
 				} else if (wall_dist <= 50){
@@ -86,7 +86,7 @@ public class FinalProjectTuesday {
 					control.move_1_grid();
 					curPos = nextPos;
 				}
-	
+
 				curHead = nextHead;
 				goal = ifGoal(curPos, curHead, goalPos, goalHead);
 				if(goal != false){
@@ -94,11 +94,11 @@ public class FinalProjectTuesday {
 					Motor.C.setSpeed(0);
 				}
 			}
-			
+
 		}
 			//printMap(my_map); // Print map to see structure of map (can choose to print for debugging purposes)
 	}
-	
+
 	public static int arr_to_int(char input){
 
 		System.out.println("CHARACTER:" + input);
@@ -128,7 +128,7 @@ public class FinalProjectTuesday {
 		}
 		else{
 			System.out.println("Goal is reached!");
-			
+
 			int curHeadIndex = arr_to_int(curHead);
 			int goalHeadIndex = arr_to_int(goalHead);
 			int direction = goalHeadIndex - curHeadIndex;
@@ -170,7 +170,7 @@ public class FinalProjectTuesday {
 				 nextHead = 'D';
 			 }
 		 }
-		
+
 		 System.out.println("nextHead:"+nextHead);
 
 
@@ -356,7 +356,7 @@ class robot_control{
 	double robot_distance = 0;
 	boolean start_flag = false;
 	double magic_number = 0.8;
-	double grid_length = 22;  
+	double grid_length = 22;
 	pidcontroller pid = new pidcontroller();
 	robot_reading robotreading = new robot_reading();
 	double turn_sensitivity_thresh = 0.15;
@@ -647,45 +647,45 @@ class robot_reading{
 
 
 class pidcontroller{
-	
+
 	double k_p = 250;
 	double k_i = 5;
 	double k_d = 500;
 	double derivative = 0;
 	double lasterror = 0;
 	double integral= 0;
-	
+
 	double floor = 0.35;
 	double line = 0.09;
 	double mid = 0.21;
 
 	double target = 0.21; //set target value
-	int direction; 
+	int direction;
 	double speed;
 	double sensor_data; //this is the vlaue returnd by sensor
-	
+
 	public void resetpid(){
 		integral = 0;
 	}
-	
+
 	public double run(){
 		sensor_data = robot_reading.get_color_reading();
-		
-		
+
+
 		double error = target - sensor_data; //if positive - target is larger - turn left
 
 		derivative = error - lasterror;
 		lasterror = error;
-		
+
 		integral *= 0.98;
 		integral += error;
-		
+
 		//if negative - target is smaller - turn right
 		double rightspeed = 90 + k_p*error + k_d*derivative + k_i*integral;
 		double leftspeed = 90 - k_p*error - k_d*derivative - k_i*integral;
-	
+
 		robot_control.turn(leftspeed, rightspeed);
 		return (leftspeed + rightspeed)/2;
-				
+
 	}
 }
